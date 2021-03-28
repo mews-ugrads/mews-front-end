@@ -17,9 +17,9 @@ class Header extends React.Component {
     render() {
         return (
             <Navbar bg="dark" variant="dark" className="navbar">
-                <Navbar.Brand href="/home">MEWS</Navbar.Brand>
+                <Navbar.Brand href="/">MEWS</Navbar.Brand>
                 <Nav className="mr-auto">
-                    <Nav.Link href="/reverseimagesearch">Reverse Image Search</Nav.Link>
+                    <Nav.Link href="/reverse">Reverse Image Search</Nav.Link>
                 </Nav>
                 <Form inline>
                     <FormControl type="text" placeholder="Search" className="mr-sm-2" />
@@ -30,6 +30,7 @@ class Header extends React.Component {
         );
     }
 }
+
 
 
 export default Header;

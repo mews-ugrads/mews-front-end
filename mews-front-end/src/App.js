@@ -1,17 +1,33 @@
 //import logo from './logo.svg';
 import './App.css';
-import Header from "./components/Header/Header";
-import React, { Component } from "react";
+//import Header from "./components/Header/Header";
+//import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+import Reverse from "./layouts/Reverse/Reverse";
+import Home from "./layouts/Home/Home";
+
 
 
 
 function App() {
   return (
-    <div className="App">
-      <Header />
-      <p> test </p>
-    </div >
+    <Router>
+
+      <div className="App">
+        <Switch>
+          <Route path="/" exact component={Home}></Route>
+          <Route path="/reverse" exact component={Reverse}></Route>
+        </Switch>
+      </div >
+    </Router>
+
+
   );
 }
 
