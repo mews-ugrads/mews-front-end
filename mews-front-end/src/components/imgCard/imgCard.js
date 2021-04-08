@@ -4,8 +4,11 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 function MyVerticallyCenteredModal(props) {
+    //const { id, image_url, likes, post_url, replies, reposts, user_id, when_posted } = props.post;
+
     return (
         <Modal
+            animation={false}
             {...props}
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
@@ -30,9 +33,10 @@ function ImgCard() {
 
     return (
         <Card style={{ width: '18rem' }}>
-            <Card.Img variant="top" src="holder.js/100px180" />
+            <Card.Img variant="top" src="holder.js" />
 
             <Card.Body>
+                <h1>test</h1>
                 <Button variant="primary" onClick={() => setModalShow(true)}>
                     View </Button>
 

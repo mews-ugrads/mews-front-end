@@ -10,15 +10,37 @@ class Feed extends React.Component {
            };
        }*/
     render() {
-        return (
-            <div>
 
-                <ImgCard />
+
+        return (
+
+            <div>
+                <ImgCard> </ImgCard>
             </div>
 
+
+
+
         );
+
     }
 }
 
 
 export default Feed;
+
+   /*  return (
+              <React.Fragment>
+                  {this.props.trendingArray.map((post) => {
+                      return (
+                          <div>
+                              <ImgCard post={post}> </ImgCard>
+                          </div>
+                      );
+                  })
+  
+                  }
+              </React.Fragment>
+  
+  
+          );*/
