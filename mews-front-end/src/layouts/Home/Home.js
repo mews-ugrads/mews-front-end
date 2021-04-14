@@ -21,6 +21,9 @@ class Home extends Component {
                     textAlign: "left"
                 }}> Trending Words</h2 >
 
+                <NetworkGraph />
+                <div id="my_dataviz"></div>
+
             </div>
         );
     }
