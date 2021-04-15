@@ -11,7 +11,7 @@ import {
 } from "react-router-dom";
 import Reverse from "./layouts/Reverse/Reverse";
 import Home from "./layouts/Home/Home";
-import * as d3 from d3;
+import * as d3 from 'd3';
 
 
 
