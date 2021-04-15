@@ -4,7 +4,8 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 function MyVerticallyCenteredModal(props) {
-    //const { id, image_url, likes, post_url, replies, reposts, user_id, when_posted } = props.post;
+
+    const { image_url, likes, post_url, replies, reposts, user_id, when_posted } = props.post;
 
     return (
         <Modal
@@ -15,11 +16,16 @@ function MyVerticallyCenteredModal(props) {
             centered
         >
             <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Post Title          </Modal.Title>
             </Modal.Header>
             <Modal.Body>
 
+                <p>Image url: {this.props.image_url}</p>
+                <img alt="" src={this.props.image_url} />
+                <p>Post url: {this.props.post_url}</p>
+                <p>Replies: {this.props.replies}</p>
+                <p>Reposts: {this.props.reposts}</p>
+
+                <p>When posted: {this.props.when_posted}</p>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>
@@ -28,15 +34,17 @@ function MyVerticallyCenteredModal(props) {
     );
 }
 
-function ImgCard() {
+function Post(props) {
     const [modalShow, setModalShow] = React.useState(false);
-
+    const { id, image_url, likes, post_url, replies, reposts, user_id, when_posted } = props.post;
+    //  const { id } = props.post;
     return (
         <Card style={{ width: '18rem' }}>
-            <Card.Img variant="top" src="holder.js" />
-
+            <a href={post_url}>
+                <Card.Img variant="top" src={image_url} />
+            </a>
             <Card.Body>
-                <h1>test</h1>
+
                 <Button variant="primary" onClick={() => setModalShow(true)}>
                     View </Button>
 
@@ -80,4 +88,4 @@ function ImgCard() {
 }*/
 
 
-export default ImgCard;
+export default Post;

@@ -1,5 +1,5 @@
 import React from "react";
-import ImgCard from "../imgCard/imgCard";
+import Post from "../Post/Post";
 
 class Feed extends React.Component {
     /*   constructor() {
@@ -13,19 +13,30 @@ class Feed extends React.Component {
 
 
         return (
+            <React.Fragment>
+                {this.props.postData.map((post) => {
+                    return (
+                        <div>
+                                      <Post post={post}> </Post>   
+       
+                        </div>
+                    );
+                })
 
-            <div>
-                <ImgCard> </ImgCard>
-            </div>
-
-
+                }
+            </React.Fragment>
 
 
         );
 
+
+
+     
+
     }
 }
 
+       // <ImgCard post={post}> </ImgCard>
 
 export default Feed;
 
