@@ -1,5 +1,7 @@
 import React from "react";
 import Post from "../Post/Post";
+//import HorizontalScroll from 'react-scroll-horizontal'
+import Row from "react-bootstrap/Row";
 
 class Feed extends React.Component {
     /*   constructor() {
@@ -13,18 +15,22 @@ class Feed extends React.Component {
 
 
         return (
-            <React.Fragment>
+            
+            <Row>
+                <React.Fragment>
                 {this.props.postData.map((post) => {
                     return (
                         <div>
                                       <Post post={post}> </Post>   
+                         
        
                         </div>
                     );
                 })
 
                 }
-            </React.Fragment>
+                </React.Fragment>
+            </Row>
 
 
         );

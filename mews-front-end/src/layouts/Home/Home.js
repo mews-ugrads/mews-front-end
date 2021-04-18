@@ -28,7 +28,7 @@ function Home() {
            })*/
         //  const response = await axios.get("http://dsg3.crc.nd.edu:5000/posts/trending")
         //  const response = await axios.get("http://dsg3.crc.nd.edu:5000/posts/1053626")
-        axios.get("http://dsg3.crc.nd.edu:5000/posts/trending").then((response) => {
+        axios.get("http://dsg3.crc.nd.edu:5000/posts/trending?amount=7").then((response) => {
             console.log("get")
             //  console.log(response.data.postData)
             const allPosts = response.data;
@@ -56,7 +56,11 @@ function Home() {
             }}> Trending Posts</h2 >
             <Feed postData={postData}
             />
-
+            <br>
+            </br>
+            <h2 style={{
+                textAlign: "left"
+            }}> Central Posts</h2 >
 
 
 

@@ -1,11 +1,104 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+//import MyModal from "../MyModal/MyModal";
 import Modal from "react-bootstrap/Modal";
+import Image from "react-bootstrap/Image";
+import axios from "axios";
 
+
+function Post(props) {
+    const [modalShow, setModalShow] = React.useState(false);
+    const { image_url, post_url, when_posted, likes, reposts, replies, id } = props.post;
+    useEffect(() => {
+        getRelated();
+        console.log("useEffect");
+    }, []);
+    const getRelated = () => {
+        axios.get(`http://dsg3.crc.nd.edu:5000/related/${id}`).then((response) => {
+            console.log("related")
+
+            console.log(response.data)
+            //  console.log(response.data.postData)
+            //console.log(allPosts);
+
+            //console.log(postData)
+        }).catch(error => console.error("error"));
+    }
+    return (
+        <div>
+            <Card style={{ width: '18rem', margin: "7px" }}>
+                <a href={post_url}>
+                    <Card.Img variant="top" src={image_url} />
+                </a>
+                <Card.Body>
+
+                    <Button variant="primary" onClick={() => setModalShow(true)}>
+                        View </Button>
+
+
+
+
+                    <Modal
+                        show={modalShow}
+                        onHide={() => setModalShow(false)}
+                        animation={false}
+                        {...props}
+                        size="lg"
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                    >
+                        <Modal.Header closeButton>
+                        </Modal.Header>
+                        <Modal.Body>
+
+                            <a href={post_url}>
+                                <Image src={image_url} fluid />
+
+                            </a>
+                            <p>Replies: {replies}</p>
+                            <p>Reposts: {reposts}</p>
+                            <p>Likes: {likes}</p>
+
+                            <p>Posted: {when_posted}</p>
+                            <h2> Related Posts </h2>
+                        </Modal.Body>
+                        <Modal.Footer>
+                        </Modal.Footer>
+                    </Modal>
+                </Card.Body>
+            </Card >
+        </div >
+    )
+}
+/*
+function Post(props) {
+    const [modalShow, setModalShow] = React.useState(false);
+    const { image_url, post_url } = props.post;
+    //  const { id } = props.post;
+    return (
+        <Card style={{ width: '18rem' }}>
+            <a href={post_url}>
+                <Card.Img variant="top" src={image_url} />
+            </a>
+            <Card.Body>
+
+                <Button variant="primary" onClick={() => setModalShow(true)}>
+                    View </Button>
+
+
+
+                <MyModal
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                />
+            </Card.Body>
+        </Card >
+    )
+}
 function MyVerticallyCenteredModal(props) {
 
-    const { image_url, likes, post_url, replies, reposts, user_id, when_posted } = props.post;
+    const { image_url } = props.post;
 
     return (
         <Modal
@@ -18,14 +111,7 @@ function MyVerticallyCenteredModal(props) {
             <Modal.Header closeButton>
             </Modal.Header>
             <Modal.Body>
-
-                <p>Image url: {this.props.image_url}</p>
-                <img alt="" src={this.props.image_url} />
-                <p>Post url: {this.props.post_url}</p>
-                <p>Replies: {this.props.replies}</p>
-                <p>Reposts: {this.props.reposts}</p>
-
-                <p>When posted: {this.props.when_posted}</p>
+                <p>{image_url}</p>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>
@@ -36,7 +122,7 @@ function MyVerticallyCenteredModal(props) {
 
 function Post(props) {
     const [modalShow, setModalShow] = React.useState(false);
-    const { id, image_url, likes, post_url, replies, reposts, user_id, when_posted } = props.post;
+    const { image_url, post_url } = props.post;
     //  const { id } = props.post;
     return (
         <Card style={{ width: '18rem' }}>
@@ -48,7 +134,9 @@ function Post(props) {
                 <Button variant="primary" onClick={() => setModalShow(true)}>
                     View </Button>
 
-                <MyVerticallyCenteredModal
+
+
+                <MyModal
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                 />
@@ -56,6 +144,8 @@ function Post(props) {
         </Card >
     )
 }
+
+
 /*class ImgCard extends React.Component {
     render() {
         console.log('I was triggered during render')
