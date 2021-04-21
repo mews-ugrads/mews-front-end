@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../components/Header/Header";
 import Feed from "../../components/Feed/Feed";
 import NetworkGraph from "../../components/NetworkGraph/Ngraph";
-import { Graph } from "react-d3-graph"; 
+
 
 class Home extends Component {
     render() {
@@ -23,7 +23,7 @@ class Home extends Component {
                     textAlign: "left"
                 }}> Trending Words</h2 >
 
-                <NetworkGraph.buildGraph />
+                <NetworkGraph />
                 <h2 style={{
                     textAlign: "left"
                 }}> Network Graph</h2 >
