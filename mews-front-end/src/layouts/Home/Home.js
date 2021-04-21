@@ -1,11 +1,5 @@
-
-import React, { useState, useEffect } from "react";
-import "../../../src/App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Header from "../../components/Header/Header";
-import Feed from "../../components/Feed/Feed";
 import axios from "axios";
-
+import NetworkGraph from "../../components/NetworkGraph/Ngraph";
 
 function Home() {
     const [postData, setPostData] = useState([]);
@@ -61,6 +55,10 @@ function Home() {
             <h2 style={{
                 textAlign: "left"
             }}> Central Posts</h2 >
+            <NetworkGraph />
+                <h2 style={{
+                    textAlign: "left"
+                }}> Network Graph</h2 >
 
 
 
@@ -100,6 +98,7 @@ function Home() {
  
          </div >
      );*/
+
 }
 
 export default Home;
