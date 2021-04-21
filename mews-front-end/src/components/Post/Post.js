@@ -1,30 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 //import MyModal from "../MyModal/MyModal";
 import Modal from "react-bootstrap/Modal";
 import Image from "react-bootstrap/Image";
 import axios from "axios";
-
+//import Feed from "../Feed/Feed";
 
 function Post(props) {
-    const [modalShow, setModalShow] = React.useState(false);
-    const { image_url, post_url, when_posted, likes, reposts, replies, id } = props.post;
-    useEffect(() => {
-        getRelated();
-        console.log("useEffect");
-    }, []);
+    const [modalShow, setModalShow] = useState(false);
+    //  const [relPosts, setRelPosts] = useState([]);
+    const { image_url, post_url, when_posted, likes, reposts, replies, id, related_text, ocr_text } = props.post;
+
     const getRelated = () => {
         axios.get(`http://dsg3.crc.nd.edu:5000/related/${id}`).then((response) => {
-            console.log("related")
+            //console.log("related")
 
             console.log(response.data)
             //  console.log(response.data.postData)
             //console.log(allPosts);
-
+            //   const allRelPosts = response.data;
+            //  console.log(allRelPosts)
+            // if ((response.data.length) > 0) {
+            //console.log("related")
+            // console.log(relPosts.id);
+            //  setRelPosts(allRelPosts);
+            //}
             //console.log(postData)
         }).catch(error => console.error("error"));
     }
+
+    useEffect(() => {
+        getRelated();
+        //console.log("useEffect");
+    });
     return (
         <div>
             <Card style={{ width: '18rem', margin: "7px" }}>
@@ -61,7 +70,10 @@ function Post(props) {
                             <p>Likes: {likes}</p>
 
                             <p>Posted: {when_posted}</p>
+                            <p>Related Text: {related_text}</p>
+                            <p>OCR Text: {ocr_text}</p>
                             <h2> Related Posts </h2>
+
                         </Modal.Body>
                         <Modal.Footer>
                         </Modal.Footer>

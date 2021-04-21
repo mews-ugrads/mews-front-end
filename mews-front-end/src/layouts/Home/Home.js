@@ -14,7 +14,7 @@ function Home() {
         getPosts();
 
 
-        console.log("useEffect");
+        // console.log("useEffect");
     }, []);
 
     const getPosts = () => {
@@ -32,7 +32,7 @@ function Home() {
             console.log("get")
             //  console.log(response.data.postData)
             const allPosts = response.data;
-            console.log(allPosts);
+            //     console.log(allPosts);
             setPostData(allPosts);
             //console.log(postData)
         }).catch(error => console.error("error"));
