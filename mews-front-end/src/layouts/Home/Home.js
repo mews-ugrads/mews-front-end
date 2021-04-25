@@ -6,49 +6,91 @@ import Header from "../../components/Header/Header";
 import Feed from "../../components/Feed/Feed";
 import NetworkGraph from "../../components/NetworkGraph/Ngraph";
 import axios from "axios";
-
+import Dropdown from "react-bootstrap/Dropdown";
+import Button from "react-bootstrap/esm/Button";
 function Home() {
+
+    const [amount, setAmount] = useState(5)
     const [CPostData, setCPostData] = useState([]);
+    const [lowerDate, setLowerDate] = useState()
 
     const [postData, setPostData] = useState([]);
 
     useEffect(() => {
         getCentralPosts();
-
         getPosts();
-
-        // console.log("useEffect");
     }, []);
-
+    // let amountPosts = 5
+    // amountPosts = document.getElementById("amount").value
     const getPosts = () => {
-        axios.get("http://dsg3.crc.nd.edu:5000/posts/trending?amount=7").then((response) => {
+        axios.get("http://dsg3.crc.nd.edu:5000/posts/trending", {
+            params: {
+                amount: amount,
+                // lower: 2021 - 01 - 01T14: 51: 06.157Z
+                //upper: new Date()
+                lower: d
+            }
+        }).then((response) => {
             const allPosts = response.data;
             setPostData(allPosts);
-           // console.log(postData)
         }).catch(error => console.error("error"));
     };
+    console.log(amount)
 
     const getCentralPosts = () => {
         axios.get("http://dsg3.crc.nd.edu:5000/graph/central").then((response) => {
             const allCPosts = response.data;
             setCPostData(allCPosts);
-           // console.log(allCPosts)
-            console.log(CPostData)
-
-         //   console.log(response.data)
-         //   console.log(CPostData);
+            console.log(CPostData);
         }).catch(error => console.error("error"));
     };
 
+    const handleChange = () => {
+        console.log(document.getElementById("amount").value)
+        setAmount(document.getElementById("amount").value)
+    }
+    const handleSubmit = (event) => {
+        //location.reload()
+        //x event.preventDefault();
+        event.preventDefault();
+        getPosts();
+    }
+    const handleDChange = () => {
+        console.log(document.getElementById("date").value)
+        setLowerDate(new Date().toLocaleString())
+    }
 
-
-
+    let d = new Date()
+    d.setDate(d.getDate() - 5);
+    console.log(d.toLocaleString());
+    //  setLowerDate(d)
     return (
         <div className="Home">
             <Header />
             <h2 style={{
                 textAlign: "left"
             }}> Trending Posts</h2 >
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Amount
+                    <select onChange={handleChange} id="amount">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="25">25</option>
+                        <option value="30">30</option>
+                        <option value="30">35</option>
+                        <option value="40">40</option>
+                        <option value="45">45</option>
+                        <option value="50">50</option>
+                    </select>
+                </label>
+                <label> Date Range
+                    <input type="datetime-local" onChange={handleDChange} id="date"></input>
+                </label>
+                <Button type="submit" variant="secondary" size="sm">Submit</Button>
+            </form>
             <Feed postData={postData}
             />
             <br>
@@ -63,7 +105,7 @@ function Home() {
 
 
 
-        </div>
+        </div >
     );
 
     /*

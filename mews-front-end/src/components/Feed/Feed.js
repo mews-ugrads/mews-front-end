@@ -11,9 +11,9 @@ class Feed extends React.Component {
                search: null,
            };
        }*/
+   
     render() {
-
-
+    
         return (
             
             <Row>
