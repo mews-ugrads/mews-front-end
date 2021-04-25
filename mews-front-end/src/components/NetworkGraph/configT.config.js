@@ -1,8 +1,8 @@
 module.exports =  {
     nodeHighlightBehavior: true,
-    focusZoom:1,
-    height: 800,
-    width:800,
+    height: 1000,
+    width:1000,
+    focusAnimationDuration: 0.75,
     node: {
     color: "lightgreen",
     size: 600,
@@ -14,6 +14,8 @@ module.exports =  {
     highlightColor: "lightblue",
     },
     d3: {
-    gravity: -300,
+    gravity: -120,
+    linkStrength: 1,
+    linkLength: 30,
     }
 };

@@ -7,15 +7,21 @@ import axios from "axios";
 
 function NetworkGraph(props){
 
-    //render() {
+       // const { pdata, ...rest } = props;
+
         const [modalShow, setModalShow] = useState(false);
         const [postData, setPostData] = useState(false);
 
-      //  console.log(this.props.CPostData)
-        const data = props.CPostData;
-        //const data = require("./data2.data")
-        // the graph configuration, just override the ones you need
-      //  const { id, image_url, post_url } = props
+        //const data = props.data;
+       // const nodeList = data.nodes
+       // console.log(data)
+        const data = require("./dataD.data.js")
+        
+        /*const data = {
+            nodes: data1.nodes,
+            links: data1.links,
+            focusedNodeId: "nodeIdToTriggerZoomAnimation"
+         };*/
 
         const myConfig = require("./configT.config.js")
 
@@ -35,20 +41,12 @@ function NetworkGraph(props){
         
         const onClickLink = function(source, target) {
             window.alert(`Clicked link between ${source} and ${target}`);
-        };
-
-        //const onMouseOverNode = function(nodeId, node) {
-        //    window.alert(`Mouse over node ${nodeId} in position (${node.x}, ${node.y})`);
-       //};
-  
-
-
-
-
+        }; 
 
        
        return (
      <div>
+         
             <Graph 
                 id="graph-id" // id is mandatory
                 data={data}
@@ -70,7 +68,7 @@ function NetworkGraph(props){
                         <Modal.Header closeButton>
                         </Modal.Header>
                         <Modal.Body>
-
+                            <h2> Image {data.image_url}</h2>
                             <h2> Related Posts {postData.id}</h2>
                         </Modal.Body>
                         <Modal.Footer>

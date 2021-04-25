@@ -8,13 +8,13 @@ import NetworkGraph from "../../components/NetworkGraph/Ngraph";
 import axios from "axios";
 
 function Home() {
-    const [CPostData, setCPostData] = useState([]);
-
+    const [CentPostData, setCentPostData] = useState([]);
+    const [ClustPostData, setClustPostData] = useState([]);
     const [postData, setPostData] = useState([]);
 
     useEffect(() => {
         getCentralPosts();
-
+        getClusteredPosts();
         getPosts();
 
         // console.log("useEffect");
@@ -30,10 +30,24 @@ function Home() {
 
     const getCentralPosts = () => {
         axios.get("http://dsg3.crc.nd.edu:5000/graph/central").then((response) => {
-            const allCPosts = response.data;
-            setCPostData(allCPosts);
+            const allCentPosts = response.data;
+            setCentPostData(allCentPosts);
            // console.log(allCPosts)
-            console.log(CPostData)
+            console.log(CentPostData)
+
+         //   console.log(response.data)
+         //   console.log(CPostData);
+        }).catch(error => console.error("error"));
+    };
+
+    const getClusteredPosts = () => {
+        axios.get("http://dsg3.crc.nd.edu:5001/clusters/recent").then((response) => {
+            const allClustPosts = response.data;
+            setClustPostData(allClustPosts);
+           // console.log(allCPosts)
+            console.log(ClustPostData)
+
+            //const {CPostData, ...data} = ClustPostData 
 
          //   console.log(response.data)
          //   console.log(CPostData);
@@ -56,11 +70,10 @@ function Home() {
             <h2 style={{
                 textAlign: "left"
             }}> Central Posts</h2 >
-            <NetworkGraph CPostData={CPostData} />
+            <NetworkGraph data={ClustPostData} />
             <h2 style={{
                 textAlign: "left"
             }}>Network Graph</h2>
-
 
 
         </div>
