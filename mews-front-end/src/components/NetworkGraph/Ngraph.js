@@ -1,8 +1,7 @@
-import * as d3 from 'd3';
+//import * as d3 from 'd3';
 import React, { useState } from "react";
-import { Graph } from 'react-d3-graph'; 
+import { Graph } from 'react-d3-graph';
 import Modal from "react-bootstrap/Modal";
-import Image from "react-bootstrap/Image";
 import axios from "axios";
 
 function NetworkGraph(props){
@@ -81,7 +80,7 @@ function NetworkGraph(props){
                     </div>
          );
    // }
-  
+ 
 }
 
 export default NetworkGraph;

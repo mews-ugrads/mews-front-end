@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ReactDOM } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 //import MyModal from "../MyModal/MyModal";
@@ -9,44 +9,49 @@ import axios from "axios";
 
 function Post(props) {
     const [modalShow, setModalShow] = useState(false);
-    //  const [relPosts, setRelPosts] = useState([]);
+    const [relPosts, setRelPosts] = useState([]);
     const { image_url, post_url, when_posted, likes, reposts, replies, id, related_text, ocr_text } = props.post;
-
-    const getRelated = () => {
-       /* axios.get(`http://dsg3.crc.nd.edu:5000/related/${id}`).then((response) => {
-            //console.log("related")
-
-            console.log(response.data)
-            //  console.log(response.data.postData)
-            //console.log(allPosts);
-            //   const allRelPosts = response.data;
-            //  console.log(allRelPosts)
-            // if ((response.data.length) > 0) {
-            //console.log("related")
-            // console.log(relPosts.id);
-            //  setRelPosts(allRelPosts);
-            //}
-            //console.log(postData)
-        }).catch(error => console.error("error"));*/
-    }
-
+    console.log("props", props.post)
     useEffect(() => {
         getRelated();
-        //console.log("useEffect");
-    });
+        // console.log("useEffect");
+    }, []);
+
+    const getRelated = () => {
+        axios.get(`http://dsg3.crc.nd.edu:5000/posts/${id}/related`).then((response) => {
+            const allRelPosts = response.data;
+            console.log("ALL", allRelPosts)
+            console.log(allRelPosts.length)
+            for (let i = 0; i < allRelPosts.length; i++) {
+                console.log(allRelPosts[i].id)
+                axios.get(`http://dsg3.crc.nd.edu:5000/posts/${id}`).then((res) => {
+                    setRelPosts(res.data);
+                    //relPosts.push(res.data)
+                }).catch(error => console.error("error"));
+            }
+        }).catch(error => console.error("error"));
+    }
+
+    console.log("rel", relPosts)
+
+
     return (
+
+
         <div>
-            <Card style={{ width: '18rem', margin: "7px" }}>
+            <Card style={{
+                width: '18rem', margin: "10px"
+            }}>
                 <a href={post_url}>
-                    <Card.Img variant="top" src={image_url} />
+                    <Card.Img variant="top" src={image_url} style={{
+                        height: "10vw", width: "100%",
+                        objectFit: "cover"
+                    }} />
                 </a>
                 <Card.Body>
 
                     <Button variant="primary" onClick={() => setModalShow(true)}>
                         View </Button>
-
-
-
 
                     <Modal
                         show={modalShow}
@@ -65,6 +70,7 @@ function Post(props) {
                                 <Image src={image_url} fluid />
 
                             </a>
+                            <p>ID: {id}</p>
                             <p>Replies: {replies}</p>
                             <p>Reposts: {reposts}</p>
                             <p>Likes: {likes}</p>
@@ -72,7 +78,6 @@ function Post(props) {
                             <p>Posted: {when_posted}</p>
                             <p>Related Text: {related_text}</p>
                             <p>OCR Text: {ocr_text}</p>
-                            <h2> Related Posts </h2>
 
                         </Modal.Body>
                         <Modal.Footer>
@@ -83,111 +88,18 @@ function Post(props) {
         </div >
     )
 }
-/*
-function Post(props) {
-    const [modalShow, setModalShow] = React.useState(false);
-    const { image_url, post_url } = props.post;
-    //  const { id } = props.post;
-    return (
-        <Card style={{ width: '18rem' }}>
-            <a href={post_url}>
-                <Card.Img variant="top" src={image_url} />
-            </a>
-            <Card.Body>
-
-                <Button variant="primary" onClick={() => setModalShow(true)}>
-                    View </Button>
-
-
-
-                <MyModal
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                />
-            </Card.Body>
-        </Card >
-    )
-}
-function MyVerticallyCenteredModal(props) {
-
-    const { image_url } = props.post;
-
-    return (
-        <Modal
-            animation={false}
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-            </Modal.Header>
-            <Modal.Body>
-                <p>{image_url}</p>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
-
-function Post(props) {
-    const [modalShow, setModalShow] = React.useState(false);
-    const { image_url, post_url } = props.post;
-    //  const { id } = props.post;
-    return (
-        <Card style={{ width: '18rem' }}>
-            <a href={post_url}>
-                <Card.Img variant="top" src={image_url} />
-            </a>
-            <Card.Body>
-
-                <Button variant="primary" onClick={() => setModalShow(true)}>
-                    View </Button>
-
-
-
-                <MyModal
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                />
-            </Card.Body>
-        </Card >
-    )
-}
-
-
-/*class ImgCard extends React.Component {
-    render() {
-        console.log('I was triggered during render')
-
-        return (
-
-            <Card style={{ width: '18rem' }}>
-                <Card.Img variant="top" src="holder.js/100px180" />
-                <Card.Body>
-                    <Card.Title>Card Title</Card.Title>
-                    <Card.Text>
-                        Some quick example text to build on the card title and make up the bulk of
-                        the card's content.
-                   </Card.Text>
-                    <>
-                        <Button variant="primary" onClick={() => setModalShow(true)}>
-                            Launch vertically centered modal
-        </Button>
-
-                        <MyVerticallyCenteredModal
-                            show={modalShow}
-                            onHide={() => setModalShow(false)}
-                        />
-                    </>                </Card.Body>
-            </Card>
-
-
-        );
-    }
-}*/
-
 
 export default Post;
+
+/*
+     <React.Fragment>
+                                {this.props.relPosts.map((post) => {
+                                    return (
+                                        <div>
+                                            <Post post={post}> </Post>
+                                        </div>
+                                    );
+                                })
+                                }
+                            </React.Fragment>
+*/
