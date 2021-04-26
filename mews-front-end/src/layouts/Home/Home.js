@@ -6,6 +6,7 @@ import Header from "../../components/Header/Header";
 import Feed from "../../components/Feed/Feed";
 import NetworkGraph from "../../components/NetworkGraph/Ngraph";
 import axios from "axios";
+const filesystem = require('fs');
 
 function Home() {
     const [CentPostData, setCentPostData] = useState([]);
@@ -41,17 +42,31 @@ function Home() {
     };
 
     const getClusteredPosts = () => {
-        axios.get("http://dsg3.crc.nd.edu:5001/clusters/recent").then((response) => {
+        axios.get("http://dsg3.crc.nd.edu:5000/clusters/recent?amount=5").then((response) => {
             const allClustPosts = response.data;
             setClustPostData(allClustPosts);
            // console.log(allCPosts)
-            console.log(ClustPostData)
+           // console.log(ClustPostData)
+
+       /*    ClustPostData = {
+            nodes: ClustPostData.nodes,
+            links: ClustPostData.links,
+            focusedNodeId: {}};
 
             //const {CPostData, ...data} = ClustPostData 
 
          //   console.log(response.data)
-         //   console.log(CPostData);
-        }).catch(error => console.error("error"));
+            console.log(ClustPostData); */
+        }).catch(error => console.error("error")); 
+        
+       /*axios.get("http://dsg3.crc.nd.edu:5000/clusters/recent").then(response => {
+        // console.log(response.data);
+            filesystem.writeFile('response.json', response.data, function (err) {
+                console.log(err);
+            });
+        }).catch(err => {
+            console.log(err)
+        }); */
     };
 
 
@@ -70,7 +85,7 @@ function Home() {
             <h2 style={{
                 textAlign: "left"
             }}> Central Posts</h2 >
-            <NetworkGraph data={ClustPostData} />
+            <NetworkGraph data={ClustPostData} /> 
             <h2 style={{
                 textAlign: "left"
             }}>Network Graph</h2>

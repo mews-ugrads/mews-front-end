@@ -12,10 +12,8 @@ function NetworkGraph(props){
         const [modalShow, setModalShow] = useState(false);
         const [postData, setPostData] = useState(false);
 
-        //const data = props.data;
-       // const nodeList = data.nodes
-       // console.log(data)
-        const data = require("./dataD.data.js")
+        const data = props.data;
+        //const data = require("./dataD.data.js")
         
         /*const data = {
             nodes: data1.nodes,
@@ -25,7 +23,9 @@ function NetworkGraph(props){
 
         const myConfig = require("./configT.config.js")
 
+    
         const onClickNode = function(nodeId, node) {
+        
             axios.get(`http://dsg3.crc.nd.edu:5000/posts/${nodeId}`).then((response) => {
                 const allPosts = response.data;
                 setPostData(allPosts)
@@ -33,11 +33,12 @@ function NetworkGraph(props){
             }).catch(error => console.error("error"));
             //window.alert(`Clicked node ${nodeId}`);
           //  window.alert(`${nodeId} is ${node.svg}`) 
-            /*const [modalShow, setModalShow] = React.useState(false);
-            */
            setModalShow(true)
 
       };
+    
+
+    
         
         const onClickLink = function(source, target) {
             window.alert(`Clicked link between ${source} and ${target}`);
