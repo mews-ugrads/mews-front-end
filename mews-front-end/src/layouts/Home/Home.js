@@ -6,64 +6,67 @@ import Header from "../../components/Header/Header";
 import Feed from "../../components/Feed/Feed";
 import NetworkGraph from "../../components/NetworkGraph/Ngraph";
 import axios from "axios";
-import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/esm/Button";
 function Home() {
-
+    const port = 5002
+    const [postData, setPostData] = useState([]);
     const [amount, setAmount] = useState(5)
     const [CPostData, setCPostData] = useState([]);
     const [lowerDate, setLowerDate] = useState()
+    const [upperDate, setUpperDate] = useState()
 
-    const [postData, setPostData] = useState([]);
 
     useEffect(() => {
-        getCentralPosts();
+        // getCentralPosts();
         getPosts();
     }, []);
-    // let amountPosts = 5
-    // amountPosts = document.getElementById("amount").value
+
     const getPosts = () => {
-        axios.get("http://dsg3.crc.nd.edu:5000/posts/trending", {
+        axios.get(`http://dsg3.crc.nd.edu:${port}/posts/trending`, {
             params: {
                 amount: amount,
-                // lower: 2021 - 01 - 01T14: 51: 06.157Z
-                //upper: new Date()
-                lower: d
+                upper: upperDate,
+                lower: lowerDate
             }
         }).then((response) => {
             const allPosts = response.data;
             setPostData(allPosts);
         }).catch(error => console.error("error"));
     };
-    console.log(amount)
 
-    const getCentralPosts = () => {
-        axios.get("http://dsg3.crc.nd.edu:5000/graph/central").then((response) => {
-            const allCPosts = response.data;
-            setCPostData(allCPosts);
-            console.log(CPostData);
-        }).catch(error => console.error("error"));
-    };
+    /*  const getCentralPosts = () => {
+          axios.get(`http://dsg3.crc.nd.edu:${port}/graph/central`).then((response) => {
+              const allCPosts = response.data;
+              setCPostData(allCPosts);
+              console.log(CPostData);
+          }).catch(error => console.error("error"));
+      };*/
 
     const handleChange = () => {
         console.log(document.getElementById("amount").value)
         setAmount(document.getElementById("amount").value)
     }
     const handleSubmit = (event) => {
-        //location.reload()
-        //x event.preventDefault();
+
         event.preventDefault();
         getPosts();
     }
-    const handleDChange = () => {
-        console.log(document.getElementById("date").value)
-        setLowerDate(new Date().toLocaleString())
+    const handleLDChange = () => {
+        console.log(document.getElementById("Ldate").value)
+        const newLDate = document.getElementById("Ldate").value
+        setLowerDate(newLDate)
+
+
+    }
+    const handleUDChange = () => {
+
+        console.log(document.getElementById("Udate").value)
+        const newUDate = document.getElementById("Udate").value
+        setUpperDate(newUDate)
+
     }
 
-    let d = new Date()
-    d.setDate(d.getDate() - 5);
-    console.log(d.toLocaleString());
-    //  setLowerDate(d)
+
     return (
         <div className="Home">
             <Header />
@@ -87,7 +90,9 @@ function Home() {
                     </select>
                 </label>
                 <label> Date Range
-                    <input type="datetime-local" onChange={handleDChange} id="date"></input>
+                <input type="datetime-local" onChange={handleLDChange} id="Ldate"></input>
+                    <input type="datetime-local" onChange={handleUDChange} id="Udate"></input>
+
                 </label>
                 <Button type="submit" variant="secondary" size="sm">Submit</Button>
             </form>
@@ -98,7 +103,6 @@ function Home() {
             <h2 style={{
                 textAlign: "left"
             }}> Central Posts</h2 >
-            <NetworkGraph CPostData={CPostData} />
             <h2 style={{
                 textAlign: "left"
             }}>Network Graph</h2>
@@ -108,7 +112,8 @@ function Home() {
         </div >
     );
 
-    /*
+    /*             <NetworkGraph CPostData={CPostData} />
+
         <h2 style={{
                 textAlign: "left"
             }}> Relatedness Posts</h2 >
