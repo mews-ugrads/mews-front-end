@@ -51,7 +51,7 @@ function Home() {
     };
 
     const getClusteredPosts = () => {
-        axios.get("http://dsg3.crc.nd.edu:5000/clusters/recent?amount=5").then((response) => {
+        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/recent?amount=5`).then((response) => {
             const allClustPosts = response.data;
             setClustPostData(allClustPosts);
             // console.log(allCPosts)
