@@ -12,12 +12,16 @@ function Home() {
     const [postData, setPostData] = useState([]);
     const [amount, setAmount] = useState(5)
     const [CPostData, setCPostData] = useState([]);
-    const [lowerDate, setLowerDate] = useState()
     const [upperDate, setUpperDate] = useState()
+    const [lowerDate, setLowerDate] = useState();
+    const [CentPostData, setCentPostData] = useState([]);
+    const [ClustPostData, setClustPostData] = useState([]);
+
 
 
     useEffect(() => {
-        // getCentralPosts();
+        getCentralPosts();
+        getClusteredPosts();
         getPosts();
     }, []);
 
@@ -34,13 +38,45 @@ function Home() {
         }).catch(error => console.error("error"));
     };
 
-    /*  const getCentralPosts = () => {
-          axios.get(`http://dsg3.crc.nd.edu:${port}/graph/central`).then((response) => {
-              const allCPosts = response.data;
-              setCPostData(allCPosts);
-              console.log(CPostData);
-          }).catch(error => console.error("error"));
-      };*/
+    const getCentralPosts = () => {
+        axios.get(`http://dsg3.crc.nd.edu:${port}/graph/central`).then((response) => {
+            const allCentPosts = response.data;
+            setCentPostData(allCentPosts);
+            // console.log(allCPosts)
+            console.log(CentPostData)
+
+            //   console.log(response.data)
+            //   console.log(CPostData);
+        }).catch(error => console.error("error"));
+    };
+
+    const getClusteredPosts = () => {
+        axios.get("http://dsg3.crc.nd.edu:5000/clusters/recent?amount=5").then((response) => {
+            const allClustPosts = response.data;
+            setClustPostData(allClustPosts);
+            // console.log(allCPosts)
+            // console.log(ClustPostData)
+
+            /*    ClustPostData = {
+                 nodes: ClustPostData.nodes,
+                 links: ClustPostData.links,
+                 focusedNodeId: {}};
+     
+                 //const {CPostData, ...data} = ClustPostData 
+     
+              //   console.log(response.data)
+                 console.log(ClustPostData); */
+        }).catch(error => console.error("error"));
+
+        /*axios.get("http://dsg3.crc.nd.edu:5000/clusters/recent").then(response => {
+         // console.log(response.data);
+             filesystem.writeFile('response.json', response.data, function (err) {
+                 console.log(err);
+             });
+         }).catch(err => {
+             console.log(err)
+         }); */
+    };
 
     const handleChange = () => {
         console.log(document.getElementById("amount").value)
@@ -103,9 +139,11 @@ function Home() {
             <h2 style={{
                 textAlign: "left"
             }}> Central Posts</h2 >
+            <NetworkGraph data={ClustPostData} />
             <h2 style={{
                 textAlign: "left"
             }}>Network Graph</h2>
+
 
 
 

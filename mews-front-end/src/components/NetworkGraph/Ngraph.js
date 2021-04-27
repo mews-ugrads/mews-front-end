@@ -4,84 +4,83 @@ import { Graph } from 'react-d3-graph';
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 
-function NetworkGraph(props) {
+function NetworkGraph(props){
 
-  //render() {
-  const [modalShow, setModalShow] = useState(false);
-  const [postData, setPostData] = useState(false);
+       // const { pdata, ...rest } = props;
 
-  //  console.log(this.props.CPostData)
-  const data = props.CPostData;
-  //const data = require("./data2.data")
-  // the graph configuration, just override the ones you need
-  //  const { id, image_url, post_url } = props
+        const [modalShow, setModalShow] = useState(false);
+        const [postData, setPostData] = useState(false);
 
-  const myConfig = require("./configT.config.js")
+        const data = props.data;
+        //const data = require("./dataD.data.js")
+        
+        /*const data = {
+            nodes: data1.nodes,
+            links: data1.links,
+            focusedNodeId: "nodeIdToTriggerZoomAnimation"
+         };*/
 
-  const onClickNode = function (nodeId, node) {
-    axios.get(`http://dsg3.crc.nd.edu:5000/posts/${nodeId}`).then((response) => {
-      const allPosts = response.data;
-      setPostData(allPosts)
-      console.log(allPosts.image_url)
-    }).catch(error => console.error("error"));
-    //window.alert(`Clicked node ${nodeId}`);
-    //  window.alert(`${nodeId} is ${node.svg}`) 
-    /*const [modalShow, setModalShow] = React.useState(false);
-    */
-    setModalShow(true)
+        const myConfig = require("./configT.config.js")
 
-  };
+    
+        const onClickNode = function(nodeId, node) {
+        
+            axios.get(`http://dsg3.crc.nd.edu:5000/posts/${nodeId}`).then((response) => {
+                const allPosts = response.data;
+                setPostData(allPosts)
+               console.log(allPosts.image_url)
+            }).catch(error => console.error("error"));
+            //window.alert(`Clicked node ${nodeId}`);
+          //  window.alert(`${nodeId} is ${node.svg}`) 
+           setModalShow(true)
 
-  const onClickLink = function (source, target) {
-    window.alert(`Clicked link between ${source} and ${target}`);
-  };
+      };
+    
 
-  //const onMouseOverNode = function(nodeId, node) {
-  //    window.alert(`Mouse over node ${nodeId} in position (${node.x}, ${node.y})`);
-  //};
+    
+        
+        const onClickLink = function(source, target) {
+            window.alert(`Clicked link between ${source} and ${target}`);
+        }; 
 
+       
+       return (
+     <div>
+         
+            <Graph 
+                id="graph-id" // id is mandatory
+                data={data}
+                config={myConfig}
+            //   onClickNode={() => setModalShow(true)}
+                onClickNode={onClickNode}
+                onClickLink={onClickLink}
+               // onMouseOverNode={onMouseOverNode}
+            />
+            <Modal
+                        show={modalShow}
+                        onHide={() => setModalShow(false)}
+                        animation={false}
+                        {...props}
+                        size="lg"
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                    >
+                        <Modal.Header closeButton>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <h2> Image {data.image_url}</h2>
+                            <h2> Related Posts {postData.id}</h2>
+                        </Modal.Body>
+                        <Modal.Footer>
+                        </Modal.Footer>
+                    </Modal>
 
-
-
-
-
-
-  return (
-    <div>
-      <Graph
-        id="graph-id" // id is mandatory
-        data={data}
-        config={myConfig}
-        //   onClickNode={() => setModalShow(true)}
-        onClickNode={onClickNode}
-        onClickLink={onClickLink}
-      // onMouseOverNode={onMouseOverNode}
-      />
-      <Modal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        animation={false}
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-        </Modal.Header>
-        <Modal.Body>
-
-          <h2> Related Posts {postData.id}</h2>
-        </Modal.Body>
-        <Modal.Footer>
-        </Modal.Footer>
-      </Modal>
-
-
-
-    </div>
-  );
-  // }
-
+   
+          
+                    </div>
+         );
+   // }
+ 
 }
 
 export default NetworkGraph;
