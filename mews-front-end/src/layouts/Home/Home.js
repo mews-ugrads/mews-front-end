@@ -6,12 +6,15 @@ import Header from "../../components/Header/Header";
 import Feed from "../../components/Feed/Feed";
 import NetworkGraph from "../../components/NetworkGraph/Ngraph";
 import axios from "axios";
+
 import Button from "react-bootstrap/esm/Button";
+const filesystem = require('fs');
 function Home() {
+
+    const [amountT, setAmountT] = useState(5);
+    const [amountClust, setAmountClust] = useState(1);
     const port = 5002
     const [postData, setPostData] = useState([]);
-    const [amount, setAmount] = useState(5)
-    const [CPostData, setCPostData] = useState([]);
     const [upperDate, setUpperDate] = useState()
     const [lowerDate, setLowerDate] = useState();
     const [CentPostData, setCentPostData] = useState([]);
@@ -28,7 +31,7 @@ function Home() {
     const getPosts = () => {
         axios.get(`http://dsg3.crc.nd.edu:${port}/posts/trending`, {
             params: {
-                amount: amount,
+                amount: amountT,
                 upper: upperDate,
                 lower: lowerDate
             }
@@ -42,50 +45,49 @@ function Home() {
         axios.get(`http://dsg3.crc.nd.edu:${port}/graph/central`).then((response) => {
             const allCentPosts = response.data;
             setCentPostData(allCentPosts);
-            // console.log(allCPosts)
-            console.log(CentPostData)
 
-            //   console.log(response.data)
-            //   console.log(CPostData);
         }).catch(error => console.error("error"));
     };
 
     const getClusteredPosts = () => {
-        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/recent?amount=5`).then((response) => {
+
+        axios.get("http://dsg3.crc.nd.edu:${port}/clusters/recent", {
+             params: {
+                amount: amountClust,
+             }
+        }).then((response) => {
             const allClustPosts = response.data;
             setClustPostData(allClustPosts);
-            // console.log(allCPosts)
-            // console.log(ClustPostData)
 
-            /*    ClustPostData = {
-                 nodes: ClustPostData.nodes,
-                 links: ClustPostData.links,
-                 focusedNodeId: {}};
-     
-                 //const {CPostData, ...data} = ClustPostData 
-     
-              //   console.log(response.data)
-                 console.log(ClustPostData); */
-        }).catch(error => console.error("error"));
-
-        /*axios.get("http://dsg3.crc.nd.edu:5000/clusters/recent").then(response => {
-         // console.log(response.data);
-             filesystem.writeFile('response.json', response.data, function (err) {
-                 console.log(err);
-             });
-         }).catch(err => {
-             console.log(err)
-         }); */
+        }).catch(error => console.error("error")); 
+        
     };
+    console.log(amountClust)
 
-    const handleChange = () => {
-        console.log(document.getElementById("amount").value)
-        setAmount(document.getElementById("amount").value)
+    const handleChangeClust = () => {
+        console.log("in handle Clust")
+        console.log(document.getElementById("amountClust").value)
+        setAmountClust(document.getElementById("amountClust").value)
+        //getClusteredPosts();
     }
-    const handleSubmit = (event) => {
-
+    const handleSubmitClust = (event) => {
+        console.log("in submitClust")
         event.preventDefault();
-        getPosts();
+        getClusteredPosts();
+    }
+
+    const handleChangeT = () => {
+        console.log(document.getElementById("amountT").value)
+        setAmountT(document.getElementById("amountT").value)
+    }
+
+    const handleSubmitT = (event) => {
+        //location.reload()
+        //x event.preventDefault();
+        console.log("in submitT")
+      
+        event.preventDefault();
+        getClusteredPosts();
     }
     const handleLDChange = () => {
         console.log(document.getElementById("Ldate").value)
@@ -109,10 +111,10 @@ function Home() {
             <h2 style={{
                 textAlign: "left"
             }}> Trending Posts</h2 >
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmitT}>
                 <label>
                     Amount
-                    <select onChange={handleChange} id="amount">
+                    <select onChange={handleChangeT} id="amountT">
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>
@@ -139,7 +141,23 @@ function Home() {
             <h2 style={{
                 textAlign: "left"
             }}> Central Posts</h2 >
-            <NetworkGraph data={ClustPostData} />
+
+            <form onSubmit={handleSubmitClust}>
+                <label>
+                    Amount
+                    <select onChange={handleChangeClust} id="amountClust">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                        <option value="8">8</option>
+                        <option value="10">10</option>
+                    </select>
+                </label>
+                <Button type="submit" variant="secondary" size="sm">Submit</Button>
+            </form>
+            <NetworkGraph data={ClustPostData} /> 
+
             <h2 style={{
                 textAlign: "left"
             }}>Network Graph</h2>
@@ -150,40 +168,6 @@ function Home() {
         </div >
     );
 
-    /*             <NetworkGraph CPostData={CPostData} />
-
-        <h2 style={{
-                textAlign: "left"
-            }}> Relatedness Posts</h2 >
-            <h2 style={{
-                textAlign: "left"
-            }}> Trending Words</h2 >
-    */
-
-    /* return (
-                    <p>ID: {postData.id}</p>
-            <p>Image url: {postData.image_url}</p>
-            <img alt="" src={postData.image_url} />
-            <p>Post url: {postData.post_url}</p>
-            <p>Replies: {postData.replies}</p>
-            <p>Reposts: {postData.reposts}</p>
-            <p>User id: {postData.user_id}</p>
-            <p>When posted: {postData.when_posted}</p>
-
-         < div className="Home" >
-             <h2 style={{
-                 textAlign: "left"
-             }}> Trending Posts</h2 >
-             <h2 style={{
-                 textAlign: "left"
-             }}> Relatedness Posts</h2 >
-             <h2 style={{
-                 textAlign: "left"
-             }}> Trending Words</h2 >
-             <h2>{postData.id}</h2>
- 
-         </div >
-     );*/
 }
 
 export default Home;
