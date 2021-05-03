@@ -3,7 +3,9 @@ module.exports =  {
     height: 1000,
     width:1000,
     focusAnimationDuration: 0.75,
-    focusZoom: 1,
+    maxZoom: 8, 
+    minZoom: .05, 
+    focusZoom: 6,
     node: {
     color: "lightgreen",
     size: 600,
@@ -16,8 +18,8 @@ module.exports =  {
     strokeWidth: 5,
     },
     d3: {
-    gravity: -275,
-    linkStrength: .9,
-    linkLength: 10,
+    gravity: -270,
+    linkStrength: .5,
+    linkLength: 1,
     }
 };
