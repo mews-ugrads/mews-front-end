@@ -6,53 +6,52 @@ import Header from "../../components/Header/Header";
 import Feed from "../../components/Feed/Feed";
 import NetworkGraph from "../../components/NetworkGraph/Ngraph";
 import axios from "axios";
-import Dropdown from "react-bootstrap/Dropdown";
+
 import Button from "react-bootstrap/esm/Button";
 const filesystem = require('fs');
 function Home() {
 
     const [amountT, setAmountT] = useState(5);
     const [amountClust, setAmountClust] = useState(1);
+    const port = 5002
+    const [postData, setPostData] = useState([]);
+    const [upperDate, setUpperDate] = useState()
     const [lowerDate, setLowerDate] = useState();
     const [CentPostData, setCentPostData] = useState([]);
     const [ClustPostData, setClustPostData] = useState([]);
 
 
-    const [postData, setPostData] = useState([]);
 
     useEffect(() => {
         getCentralPosts();
         getClusteredPosts();
         getPosts();
     }, []);
-    // let amountPosts = 5
-    // amountPosts = document.getElementById("amount").value
+
     const getPosts = () => {
-        axios.get("http://dsg3.crc.nd.edu:5000/posts/trending", {
+        axios.get(`http://dsg3.crc.nd.edu:${port}/posts/trending`, {
             params: {
                 amount: amountT,
-                // lower: 2021 - 01 - 01T14: 51: 06.157Z
-                //upper: new Date()
-                lower: d
+                upper: upperDate,
+                lower: lowerDate
             }
         }).then((response) => {
             const allPosts = response.data;
             setPostData(allPosts);
         }).catch(error => console.error("error"));
     };
-    console.log(amountT)
 
     const getCentralPosts = () => {
-        axios.get("http://dsg3.crc.nd.edu:5000/graph/central").then((response) => {
+        axios.get(`http://dsg3.crc.nd.edu:${port}/graph/central`).then((response) => {
             const allCentPosts = response.data;
             setCentPostData(allCentPosts);
-           // console.log(allCPosts)
-           // console.log(CentPostData)
+
         }).catch(error => console.error("error"));
     };
 
     const getClusteredPosts = () => {
-        axios.get("http://dsg3.crc.nd.edu:5000/clusters/recent", {
+
+        axios.get("http://dsg3.crc.nd.edu:${port}/clusters/recent", {
              params: {
                 amount: amountClust,
              }
@@ -81,22 +80,30 @@ function Home() {
         console.log(document.getElementById("amountT").value)
         setAmountT(document.getElementById("amountT").value)
     }
+
     const handleSubmitT = (event) => {
         //location.reload()
         //x event.preventDefault();
         console.log("in submitT")
+      
         event.preventDefault();
         getClusteredPosts();
     }
-    const handleDChange = () => {
-        console.log(document.getElementById("date").value)
-        setLowerDate(new Date().toLocaleString())
+    const handleLDChange = () => {
+        console.log(document.getElementById("Ldate").value)
+        const newLDate = document.getElementById("Ldate").value
+        setLowerDate(newLDate)
+
+
+    }
+    const handleUDChange = () => {
+
+        console.log(document.getElementById("Udate").value)
+        const newUDate = document.getElementById("Udate").value
+        setUpperDate(newUDate)
+
     }
 
-    let d = new Date()
-    d.setDate(d.getDate() - 5);
-    console.log(d.toLocaleString());
-    //  setLowerDate(d)
 
     return (
         <div className="Home">
@@ -121,7 +128,9 @@ function Home() {
                     </select>
                 </label>
                 <label> Date Range
-                    <input type="datetime-local" onChange={handleDChange} id="date"></input>
+                <input type="datetime-local" onChange={handleLDChange} id="Ldate"></input>
+                    <input type="datetime-local" onChange={handleUDChange} id="Udate"></input>
+
                 </label>
                 <Button type="submit" variant="secondary" size="sm">Submit</Button>
             </form>
@@ -132,6 +141,7 @@ function Home() {
             <h2 style={{
                 textAlign: "left"
             }}> Central Posts</h2 >
+
             <form onSubmit={handleSubmitClust}>
                 <label>
                     Amount
@@ -147,6 +157,7 @@ function Home() {
                 <Button type="submit" variant="secondary" size="sm">Submit</Button>
             </form>
             <NetworkGraph data={ClustPostData} /> 
+
             <h2 style={{
                 textAlign: "left"
             }}>Network Graph</h2>
@@ -157,39 +168,6 @@ function Home() {
         </div >
     );
 
-    /*
-        <h2 style={{
-                textAlign: "left"
-            }}> Relatedness Posts</h2 >
-            <h2 style={{
-                textAlign: "left"
-            }}> Trending Words</h2 >
-    */
-
-    /* return (
-                    <p>ID: {postData.id}</p>
-            <p>Image url: {postData.image_url}</p>
-            <img alt="" src={postData.image_url} />
-            <p>Post url: {postData.post_url}</p>
-            <p>Replies: {postData.replies}</p>
-            <p>Reposts: {postData.reposts}</p>
-            <p>User id: {postData.user_id}</p>
-            <p>When posted: {postData.when_posted}</p>
-
-         < div className="Home" >
-             <h2 style={{
-                 textAlign: "left"
-             }}> Trending Posts</h2 >
-             <h2 style={{
-                 textAlign: "left"
-             }}> Relatedness Posts</h2 >
-             <h2 style={{
-                 textAlign: "left"
-             }}> Trending Words</h2 >
-             <h2>{postData.id}</h2>
- 
-         </div >
-     );*/
 }
 
 export default Home;
