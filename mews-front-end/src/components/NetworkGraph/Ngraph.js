@@ -13,7 +13,7 @@ function NetworkGraph(props){
 
        // var data = props.data;
       //  console.log(data.nodes)
-        const data = require("./dataD.data.js")
+        const data = require("./data3.data.js")
         
         /*const data = {
             nodes: data1.nodes,
@@ -69,16 +69,23 @@ function NetworkGraph(props){
                 canvas.width = this.naturalWidth;
                 canvas.height = this.naturalHeight;
 
+                console.log(postData.boxes)
                 // Will draw the image as 300x227, ignoring the custom size of 60x45
                 // given in the constructor
-                context.drawImage(this, 0, 0);
+               // context.drawImage(this, 0, 0);
 
                 // To use the custom size we'll have to specify the scale parameters
                 // using the element's width and height properties - lets draw one
                 // on top in the corner:
                 context.drawImage(this, 0, 0, 100, 100 * 500/500);
-                context.strokeRect(200, 50, 100, 100);
-                context.strokeRect(400, 50, 100, 100);
+                var len = postData.boxes.length;
+                for(var i = 0; i < len; i++){
+                    console.log("drawing boxes");
+                    console.log(i[0], i[1], i[2], i[3], i[4]);
+                    context.strokeRect(i[0], i[1], i[2], i[3], i[4]);
+                }
+                //context.strokeRect(200, 50, 100, 100);
+                //context.strokeRect(400, 50, 100, 100);
             }
 
 
