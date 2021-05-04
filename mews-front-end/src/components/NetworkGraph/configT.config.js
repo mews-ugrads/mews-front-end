@@ -12,6 +12,7 @@ module.exports =  {
     highlightStrokeColor: "blue",
     labelProperty: "central",
     svg:"",
+    boxes:"",
     },
     link: {
     highlightColor: "lightblue",

@@ -13,7 +13,7 @@ function Home() {
 
     const [amountT, setAmountT] = useState(5);
     const [amountClust, setAmountClust] = useState(1);
-    const port = 5002
+    const port = 5000;
     const [postData, setPostData] = useState([]);
     const [upperDate, setUpperDate] = useState()
     const [lowerDate, setLowerDate] = useState();
@@ -23,9 +23,9 @@ function Home() {
 
 
     useEffect(() => {
-        getCentralPosts();
+        //getCentralPosts();
         getClusteredPosts();
-        getPosts();
+        getPosts()
     }, []);
 
     const getPosts = () => {
@@ -33,7 +33,8 @@ function Home() {
             params: {
                 amount: amountT,
                 upper: upperDate,
-                lower: lowerDate
+                lower: lowerDate,
+                getBoxes: true,
             }
         }).then((response) => {
             const allPosts = response.data;
@@ -50,11 +51,11 @@ function Home() {
     };
 
     const getClusteredPosts = () => {
-
-        axios.get("http://dsg3.crc.nd.edu:${port}/clusters/recent", {
-             params: {
+        console.log("in get clustered")
+        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/6`, { //recent
+            /* params: {
                 amount: amountClust,
-             }
+             }*/
         }).then((response) => {
             const allClustPosts = response.data;
             setClustPostData(allClustPosts);
@@ -68,7 +69,7 @@ function Home() {
         console.log("in handle Clust")
         console.log(document.getElementById("amountClust").value)
         setAmountClust(document.getElementById("amountClust").value)
-        //getClusteredPosts();
+        getClusteredPosts();
     }
     const handleSubmitClust = (event) => {
         console.log("in submitClust")
@@ -87,7 +88,7 @@ function Home() {
         console.log("in submitT")
       
         event.preventDefault();
-        getClusteredPosts();
+        getPosts();
     }
     const handleLDChange = () => {
         console.log(document.getElementById("Ldate").value)
@@ -141,7 +142,7 @@ function Home() {
             <h2 style={{
                 textAlign: "left"
             }}> Central Posts</h2 >
-
+            
             <form onSubmit={handleSubmitClust}>
                 <label>
                     Amount
@@ -160,7 +161,7 @@ function Home() {
 
             <h2 style={{
                 textAlign: "left"
-            }}>Network Graph</h2>
+            }}>Network Graph</h2> 
 
 
 
@@ -171,3 +172,25 @@ function Home() {
 }
 
 export default Home;
+
+/*
+<form onSubmit={handleSubmitClust}>
+                <label>
+                    Amount
+                    <select onChange={handleChangeClust} id="amountClust">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                        <option value="8">8</option>
+                        <option value="10">10</option>
+                    </select>
+                </label>
+                <Button type="submit" variant="secondary" size="sm">Submit</Button>
+            </form>
+            <NetworkGraph data={ClustPostData} /> 
+
+            <h2 style={{
+                textAlign: "left"
+            }}>Network Graph</h2> 
+*/
