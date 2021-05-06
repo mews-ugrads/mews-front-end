@@ -12,7 +12,8 @@ function Post(props) {
     const [modalShow, setModalShow] = useState(false);
     const [relPosts, setRelPosts] = useState([]);
 
-    let { image_url, post_url, when_posted, likes, reposts, replies, id, related_text, ocr_text, boxes } = props.post;
+    let { image_url, post_url, when_posted, likes, reposts, replies, id, related_text, ocr_text, boxes, heatmap_url } = props.post;
+
     useEffect(() => {
         getRelated();
     }, []);
@@ -44,33 +45,6 @@ function Post(props) {
       // if(canvas != null) {canvas.onload = drawCanv(canvas); } 
 
     };
-
- /*   const drawCanv = function(canva) {
-        console.log("in drawCanv")
-        let canvas = document.getElementById("canvas");
-           //let canvas = document.getElementById("canvas");
-                let context = canva.getContext("2d");
-                const img = new Image(60, 45); // Using optional size for image
-                document.getElementById("image").style.visibility = 'hidden'; 
-                img.onload = drawImageAS; // Draw when image has loaded
-                img.src = image_url;
-            
-
-                function drawImageAS() {
-                    // Use the intrinsic size of image in CSS pixels for the canvas element
-                        let WRfactor = 750/this.naturalWidth;
-                        let HRfactor = 750/this.naturalHeight;
-
-                        canva.width = this.naturalWidth;
-                        canva.height = this.naturalHeight;
-
-                        context.drawImage(this,0,0,canva.width * WRfactor, canva.height * HRfactor);//canvas.width, canvas.height);
-                };
-           // }
-
-           //setModalShow(true)
-
-    }; */
 
     const showBoxes = function() {
       if(boxes.length > 0 ){
@@ -130,6 +104,15 @@ function Post(props) {
 
 
   
+
+    const displayHeatmap = () => {
+        console.log("func")
+        document.getElementById("heatmap").style.display = "block";
+    }
+    /* const showModal = () => {
+         
+     }*/
+
     return (
 
 
@@ -163,11 +146,19 @@ function Post(props) {
                         </Modal.Header>
                         <Modal.Body>
 
-                            <img  src={image_url} id="my_image" width="750" height="750"/>
+ <a href={post_url}>
+                            <img  src={image_url} id="my_image" width="750" height="750"/></a>
                             <canvas width="0" height="0" id="canvas" ></canvas>
                             
                             <Button variant="primary" onClick={showBoxes} id="showbutton"/*setModalShow(true) onClick={showModal}*/>
                                 ShowBoxes </Button>
+                            
+                            <Button variant="primary" onClick={displayHeatmap} >Display Heatmap</Button>
+                            
+                             <img  id="heatmap" src={heatmap_url} style={{ display: "none" }} width="750" height="750"/>
+
+                        
+
                             <p>ID: {id}</p>
                             <p>Replies: {replies}</p>
                             <p>Reposts: {reposts}</p>
