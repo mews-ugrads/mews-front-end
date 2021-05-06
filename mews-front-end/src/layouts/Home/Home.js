@@ -6,14 +6,17 @@ import Header from "../../components/Header/Header";
 import Feed from "../../components/Feed/Feed";
 import NetworkGraph from "../../components/NetworkGraph/Ngraph";
 import axios from "axios";
+import Form from "react-bootstrap/Form";
 
-import Button from "react-bootstrap/esm/Button";
+import Button from "react-bootstrap/Button";
 const filesystem = require('fs');
 function Home() {
+    const port = 5002
+
+    const [newSearch, setNewSearch] = useState();
 
     const [amountT, setAmountT] = useState(5);
     const [amountClust, setAmountClust] = useState(1);
-    const port = 5002
     const [postData, setPostData] = useState([]);
     const [upperDate, setUpperDate] = useState()
     const [lowerDate, setLowerDate] = useState();
@@ -33,7 +36,8 @@ function Home() {
             params: {
                 amount: amountT,
                 upper: upperDate,
-                lower: lowerDate
+                lower: lowerDate,
+                search: newSearch
             }
         }).then((response) => {
             const allPosts = response.data;
@@ -51,16 +55,16 @@ function Home() {
 
     const getClusteredPosts = () => {
 
-        axios.get("http://dsg3.crc.nd.edu:${port}/clusters/recent", {
-             params: {
+        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/recent`, {
+            params: {
                 amount: amountClust,
-             }
+            }
         }).then((response) => {
             const allClustPosts = response.data;
             setClustPostData(allClustPosts);
 
-        }).catch(error => console.error("error")); 
-        
+        }).catch(error => console.error("error"));
+
     };
     console.log(amountClust)
 
@@ -85,9 +89,10 @@ function Home() {
         //location.reload()
         //x event.preventDefault();
         console.log("in submitT")
-      
+
         event.preventDefault();
-        getClusteredPosts();
+
+        getPosts();
     }
     const handleLDChange = () => {
         console.log(document.getElementById("Ldate").value)
@@ -102,6 +107,21 @@ function Home() {
         const newUDate = document.getElementById("Udate").value
         setUpperDate(newUDate)
 
+    }
+
+    const handleSearchSubmit = (event) => {
+        console.log("in search submit")
+
+        event.preventDefault();
+
+        getPosts();
+        console.log("done")
+    }
+
+    const handleSearch = () => {
+        console.log(document.getElementById("searchValue").value)
+        const newSearch = document.getElementById("searchValue").value
+        setNewSearch(newSearch)
     }
 
 
@@ -134,6 +154,18 @@ function Home() {
                 </label>
                 <Button type="submit" variant="secondary" size="sm">Submit</Button>
             </form>
+            <Form onSubmit={handleSearchSubmit}>
+                <Form.Group controlId="search">
+                    <Form.Label>Search</Form.Label>
+                    <Form.Control type="text" placeholder="Search" id="searchValue" onChange={handleSearch} />
+
+                </Form.Group>
+
+
+                <Button variant="primary" type="submit">
+                    Search
+  </Button>
+            </Form >
             <Feed postData={postData}
             />
             <br>
@@ -154,9 +186,9 @@ function Home() {
                         <option value="10">10</option>
                     </select>
                 </label>
-                <Button type="submit" variant="secondary" size="sm">Submit</Button>
+                <Button type="submit" variant="primary" size="sm">Search</Button>
             </form>
-            <NetworkGraph data={ClustPostData} /> 
+
 
             <h2 style={{
                 textAlign: "left"
@@ -171,3 +203,5 @@ function Home() {
 }
 
 export default Home;
+
+// <NetworkGraph data={ClustPostData} />

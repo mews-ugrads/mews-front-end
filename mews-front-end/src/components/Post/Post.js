@@ -12,7 +12,9 @@ function Post(props) {
     const [modalShow, setModalShow] = useState(false);
     const [relPosts, setRelPosts] = useState([]);
 
-    const { image_url, post_url, when_posted, likes, reposts, replies, id, related_text, ocr_text } = props.post;
+    let { image_url, post_url, when_posted, likes, reposts, replies, id, related_text, ocr_text, heatmap_url } = props.post;
+    //  const str1 = `http://dsg3.crc.nd.edu:${port}`
+    //image_url = str1.concat(image_url)
     useEffect(() => {
         getRelated();
     }, []);
@@ -32,7 +34,10 @@ function Post(props) {
             }
         }).catch(error => console.error("error"));
     }
-
+    const displayHeatmap = () => {
+        console.log("func")
+        document.getElementById("heatmap").style.display = "block";
+    }
     /* const showModal = () => {
          
      }*/
@@ -69,6 +74,11 @@ function Post(props) {
 
                             <a href={post_url}>
                                 <Image src={image_url} fluid />
+
+                            </a>
+                            <Button variant="primary" onClick={displayHeatmap} >Display Heatmap</Button>
+                            <a href={post_url}>
+                                <Image id="heatmap" src={heatmap_url} style={{ display: "none" }} />
 
                             </a>
                             <p>ID: {id}</p>
