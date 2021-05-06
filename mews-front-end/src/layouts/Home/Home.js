@@ -7,18 +7,20 @@ import Feed from "../../components/Feed/Feed";
 import NetworkGraph from "../../components/NetworkGraph/Ngraph";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import Container from "react-bootstrap/Container"
 
 import Button from "react-bootstrap/Button";
 const filesystem = require('fs');
 function Home() {
-    const port = 5002
-
+    const port = 5000;
     const [newSearch, setNewSearch] = useState();
 
-    const [amountT, setAmountT] = useState(5);
+    const [amountT, setAmountT] = useState(8);
     const [amountClust, setAmountClust] = useState(1);
 
-    const port = 5000;
+
 
     const [postData, setPostData] = useState([]);
     const [upperDate, setUpperDate] = useState()
@@ -64,7 +66,7 @@ function Home() {
                 amount: amountClust,
              }*/
 
-     //   axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/recent`, {
+            //   axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/recent`, {
         }).then((response) => {
             const allClustPosts = response.data;
             setClustPostData(allClustPosts);
@@ -132,52 +134,61 @@ function Home() {
     return (
         <div className="Home">
             <Header />
-            <h2 style={{
-                textAlign: "left"
-            }}> Trending Posts</h2 >
-            <form onSubmit={handleSubmitT}>
-                <label>
-                    Amount
-                    <select onChange={handleChangeT} id="amountT">
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="25">25</option>
-                        <option value="30">30</option>
-                        <option value="30">35</option>
-                        <option value="40">40</option>
-                        <option value="45">45</option>
-                        <option value="50">50</option>
-                    </select>
-                </label>
-                <label> Date Range
-                <input type="datetime-local" onChange={handleLDChange} id="Ldate"></input>
-                    <input type="datetime-local" onChange={handleUDChange} id="Udate"></input>
+            <br></br>
+            <Container>
+                <Navbar style={{ backgroundColor: "white" }} bg="light" variant="light" className="navbar">
+                    <Navbar.Brand style={{ fontSize: "30px" }} href="/">Trending Posts</Navbar.Brand>
+                    <Form inline onSubmit={handleSearchSubmit}>
+                        <Form.Group controlId="search">
+                            <Form.Control style={{
 
-                </label>
-                <Button type="submit" variant="secondary" size="sm">Submit</Button>
-            </form>
-            <Form onSubmit={handleSearchSubmit}>
-                <Form.Group controlId="search">
-                    <Form.Label>Search</Form.Label>
-                    <Form.Control type="text" placeholder="Search" id="searchValue" onChange={handleSearch} />
+                            }} type="text" placeholder="Search" id="searchValue" onChange={handleSearch} className="mr-sm-2" />
 
-                </Form.Group>
+                        </Form.Group>
 
 
-                <Button variant="primary" type="submit">
-                    Search
+                        <Button variant="outline-success" type="submit">
+                            Search
   </Button>
-            </Form >
-            <Feed postData={postData}
-            />
+                    </Form >
+                    <form onSubmit={handleSubmitT}>
+                        <label>
+                            Amount
+                    <select onChange={handleChangeT} id="amountT">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                                <option value="30">30</option>
+                                <option value="30">35</option>
+                                <option value="40">40</option>
+                                <option value="45">45</option>
+                                <option value="50">50</option>
+                            </select>
+                        </label>
+                        <label> Date Range
+                <input type="datetime-local" onChange={handleLDChange} id="Ldate"></input>
+                            <input type="datetime-local" onChange={handleUDChange} id="Udate"></input>
+
+                        </label>
+                        <Button type="submit" variant="outline-success" size="sm">Submit</Button>
+                    </form>
+
+                </Navbar>
+                <Feed postData={postData}
+                />
+            </Container>
+
+
+
+
             <br>
             </br>
             <h2 style={{
                 textAlign: "center"
             }}> Network Graph</h2 >
-            
+
             <form onSubmit={handleSubmitClust}>
                 <label>
                     Amount
@@ -192,12 +203,7 @@ function Home() {
                 </label>
                 <Button type="submit" variant="primary" size="sm">Search</Button>
             </form>
-
-
-            <h2 style={{
-                textAlign: "left",
-
-            }}></h2> 
+            <NetworkGraph data={ClustPostData} />
 
 
 
@@ -224,10 +230,10 @@ export default Home;
                 </label>
                 <Button type="submit" variant="secondary" size="sm">Submit</Button>
             </form>
-            <NetworkGraph data={ClustPostData} /> 
+            <NetworkGraph data={ClustPostData} />
 
             <h2 style={{
                 textAlign: "left"
-            }}>Network Graph</h2> 
+            }}>Network Graph</h2>
 */
 
