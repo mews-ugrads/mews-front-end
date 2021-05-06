@@ -8,34 +8,15 @@ import Button from "react-bootstrap/Button";
 
 function NetworkGraph(props){
 
-       // const { pdata, ...rest } = props;
-
         const [modalShow, setModalShow] = useState(false);
         const [postData, setPostData] = useState(false);
 
         var data = props.data;
-      //  console.log(data.nodes)
-        //const data = require("./data3.data.js")
-        
-        /*const data = {
-            nodes: data1.nodes,
-            links: data1.links,
-            focusedNodeId: "nodeIdToTriggerZoomAnimation"
-         };*/
+
 
         const myConfig = require("./configT.config.js")
-
     
-        const onClickNode = function(nodeId, node) {
-
-         /*   data = {
-                nodes: data.nodes,
-                links: data.dlinks,
-                focusedNodeId: nodeId,
-             };
-             console.log(data) 
-        */
-             
+        const onClickNode = function(nodeId, node) {             
        
             axios.get(`http://dsg3.crc.nd.edu:5000/posts/${nodeId}`).then((response) => {
                 const allPosts = response.data;
@@ -56,24 +37,19 @@ function NetworkGraph(props){
 
            let canvas = document.getElementById("canvas");
            let context = canvas.getContext("2d");
-           const img = new Image(60, 45); // Using optional size for image
+           const img = new Image(); // Using optional size for image
            img.onload = drawImageAS; // Draw when image has loaded
            img.src = pic_url;
 
            function drawImageAS() {
             // Use the intrinsic size of image in CSS pixels for the canvas element
-                canvas.width = this.naturalWidth;
-                canvas.height = this.naturalHeight;
+                let WRfactor = 750/this.naturalWidth;
+                let HRfactor = 750/this.naturalHeight;
 
-                //console.log(pd.boxes)
-                // Will draw the image as 300x227, ignoring the custom size of 60x45
-                // given in the constructor
-                context.drawImage(this, 0, 0);
+                canvas.width = this.naturalWidth * WRfactor;
+                canvas.height = this.naturalHeight * HRfactor;
 
-                // To use the custom size we'll have to specify the scale parameters
-                // using the element's width and height properties - lets draw one
-                // on top in the corner:
-                context.drawImage(this,0,0,canvas.width, canvas.height);
+                context.drawImage(this,0,0,this.naturalWidth * WRfactor, this.naturalHeight * HRfactor);
            };
 
         
@@ -84,25 +60,22 @@ function NetworkGraph(props){
            let canvas = document.getElementById("canvas");
            let context = canvas.getContext("2d");
 
-           const img = new Image(60, 45); // Using optional size for image
+           const img = new Image(0,0); // Using optional size for image
            img.onload = drawImageActualSize; // Draw when image has loaded
            img.src = postData.image_url;
 
             function drawImageActualSize() {
             // Use the intrinsic size of image in CSS pixels for the canvas element
-                canvas.width = this.naturalWidth;
-                canvas.height = this.naturalHeight;
+                let WRfactor = 750/this.naturalWidth;
+                let HRfactor = 750/this.naturalHeight;
+
+                canvas.width = this.naturalWidth * WRfactor;
+                canvas.height = this.naturalHeight * HRfactor;
 
                 console.log(postData.boxes)
-                // Will draw the image as 300x227, ignoring the custom size of 60x45
-                // given in the constructor
-                context.drawImage(this, 0, 0);
 
-                // To use the custom size we'll have to specify the scale parameters
-                // using the element's width and height properties - lets draw one
-                // on top in the corner:
-                context.drawImage(this,0,0,canvas.width, canvas.height);
-                //console.log(postData.boxes)
+                context.drawImage(this,0,0,this.naturalWidth * WRfactor, this.naturalHeight * HRfactor);//canvas.width, canvas.height);
+
                 if (postData.boxes != null){
                  
                     var len = (postData.boxes).length;
@@ -114,31 +87,22 @@ function NetworkGraph(props){
                             let arrayN = JSON.parse("[" + array + "]");
                             let lenN = arrayN.length;
                             for(var j = 0; j < lenN; j++){
-                                //console.log(arrayN[j][0])
                                 context.strokeStyle = 'red';
                                 context.lineWidth   = 7;
-                                context.strokeRect(arrayN[j][0], arrayN[j][1], arrayN[j][2], arrayN[j][3]);
-                                //context.strokeRect(0,0,300,300);
+                                context.strokeRect(arrayN[j][0]*WRfactor, arrayN[j][1]*HRfactor, (arrayN[j][2]- arrayN[j][0])*WRfactor, (arrayN[j][3]-arrayN[j][1])*HRfactor);
+
                                 console.log("drawing boxesN");
-                                //context.fillStyle = "#009900";
-                                //context.fillRect(0,0,300,300);
+
                             }
                         }
-                        //let array = JSON.parse("[" + i + "]");
-                    /* var array = i.toString().split(",");
-                        console.log(array)
-                        console.log(array[0], array[1], array[2], array[3]);
-                        context.strokeRect(array[0], array[1], array[2], array[3]);*/
+
                     }
 
                 }
-                //context.strokeRect(200, 50, 100, 100);
-                //context.strokeRect(400, 50, 100, 100);
+
             }
         };
 
-
-          // context.strokeRect(200, 50, 100, 100);
         
       
     
@@ -175,10 +139,17 @@ function NetworkGraph(props){
                         </Modal.Header>
                         <Modal.Body>
                             
-                            <canvas width="500" height="500" id="canvas"></canvas>
+                            <canvas width="0" height="0" id="canvas"></canvas>
                             <Button variant="primary" onClick={showBoxes} /*setModalShow(true) onClick={showModal}*/>
                                 ShowBoxes </Button>
-                            <h2> Related Posts {postData.id}</h2>
+                            <p>ID: {postData.id}</p>
+                            <p>Replies: {postData.replies}</p>
+                            <p>Reposts: {postData.reposts}</p>
+                            <p>Likes: {postData.likes}</p>
+
+                            <p>Posted: {postData.when_posted}</p>
+                            <p>Related Text: {postData.related_text}</p>
+                            <p>OCR Text: {postData.ocr_text}</p>
                         </Modal.Body>
                         <Modal.Footer>
                         </Modal.Footer>

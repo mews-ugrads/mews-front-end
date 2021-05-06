@@ -3,75 +3,129 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 //import MyModal from "../MyModal/MyModal";
 import Modal from "react-bootstrap/Modal";
-import Image from "react-bootstrap/Image";
+import {Image as BImage} from "react-bootstrap/Image";
 import axios from "axios";
 //import Feed from "../Feed/Feed";
 
 function Post(props) {
-    const port = 5000
+    const port = 5000;
     const [modalShow, setModalShow] = useState(false);
     const [relPosts, setRelPosts] = useState([]);
-    //const [boxShow, setBoxShow] = useState(false);
 
     let { image_url, post_url, when_posted, likes, reposts, replies, id, related_text, ocr_text, boxes } = props.post;
-    const str1 = `http://dsg3.crc.nd.edu:${port}`
-    image_url = str1.concat(image_url)
     useEffect(() => {
         getRelated();
     }, []);
-
+    
     const getRelated = () => {
         axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${id}/related`).then((response) => {
             const allRelPosts = response.data;
-            console.log("ALL", allRelPosts)
-            console.log(allRelPosts.length)
+           // console.log("ALL", allRelPosts)
+           // console.log(allRelPosts.length)
             for (let i = 0; i < allRelPosts.length; i++) {
                 console.log(id)
                 axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${allRelPosts[i].id}`).then((res) => {
                     relPosts.push(res.data)
-                    console.log("res", res.data)
-                    console.log("rel", relPosts)
+                   // console.log("res", res.data)
+                   // console.log("rel", relPosts)
                 }).catch(error => console.error("error"));
             }
         }).catch(error => console.error("error"));
     }
 
-    const showBoxes = function() {
+    const showModal = function() {
+        setModalShow(true)
+       // if(boxes.length < 1){
+       //     document.getElementById('img').style.visibility = 'none';
+       // }
+       // let canvas = document.getElementById("canvas");
+       //let canvas = document.getElementById("canvas");
 
+      // if(canvas != null) {canvas.onload = drawCanv(canvas); } 
+
+    };
+
+ /*   const drawCanv = function(canva) {
+        console.log("in drawCanv")
+        let canvas = document.getElementById("canvas");
+           //let canvas = document.getElementById("canvas");
+                let context = canva.getContext("2d");
+                const img = new Image(60, 45); // Using optional size for image
+                document.getElementById("image").style.visibility = 'hidden'; 
+                img.onload = drawImageAS; // Draw when image has loaded
+                img.src = image_url;
+            
+
+                function drawImageAS() {
+                    // Use the intrinsic size of image in CSS pixels for the canvas element
+                        let WRfactor = 750/this.naturalWidth;
+                        let HRfactor = 750/this.naturalHeight;
+
+                        canva.width = this.naturalWidth;
+                        canva.height = this.naturalHeight;
+
+                        context.drawImage(this,0,0,canva.width * WRfactor, canva.height * HRfactor);//canvas.width, canvas.height);
+                };
+           // }
+
+           //setModalShow(true)
+
+    }; */
+
+    const showBoxes = function() {
+      if(boxes.length > 0 ){
+        document.getElementById('my_image').style.display = 'none';
+        console.log(boxes)
         console.log("in showBoxes")
         let canvas = document.getElementById("canvas");
-        let context = canvas.getContext("2d");
 
-        const img = document.getElementById("image");//new Image(60, 45); // Using optional size for image
-        img.onload = drawImageActualSize; // Draw when image has loaded
+            let context = canvas.getContext("2d");
 
-         // Load an image of intrinsic size 300x227 in CSS pixels
-         img.src = image_url;
+            const img = new Image(60, 45); // Using optional size for image
+            img.onload = drawImageActualSize; // Draw when image has loaded
+            img.src = image_url;
 
-        console.log(boxes);
+            function drawImageActualSize() {
+            // Use the intrinsic size of image in CSS pixels for the canvas element
+                let WRfactor = 750/this.naturalWidth;
+                let HRfactor = 750/this.naturalHeight;
 
-        function drawImageActualSize() {
-         // Use the intrinsic size of image in CSS pixels for the canvas element
-             canvas.width = this.naturalWidth;
-             canvas.height = this.naturalHeight;
+                canvas.width = this.naturalWidth * WRfactor;
+                canvas.height = this.naturalHeight * HRfactor;
 
-             console.log(boxes)
-             // Will draw the image as 300x227, ignoring the custom size of 60x45
-             // given in the constructor
-            // context.drawImage(this, 0, 0);
+                console.log(boxes)
 
-             // To use the custom size we'll have to specify the scale parameters
-             // using the element's width and height properties - lets draw one
-             // on top in the corner:
-             context.drawImage(this, 0, 0, 100, 100 * 500/500);
-             var len = boxes.length;
-             for(var i = 0; i < len; i++){
-                 console.log("drawing boxes");
-                 console.log(i[0], i[1], i[2], i[3], i[4]);
-                 context.strokeRect(i[0], i[1], i[2], i[3], i[4]);
-             }
-        }
-    }
+                context.drawImage(this,0,0,this.naturalWidth * WRfactor, this.naturalHeight * HRfactor);//canvas.width, canvas.height);
+
+                if (boxes != null){
+                
+                    var len = (boxes).length;
+                    for(var i = 0; i < len; i++){
+                        console.log("drawing boxes");
+                        let array = boxes[i]
+                        console.log(array)
+                        if(array != null){
+                            let arrayN = JSON.parse("[" + array + "]");
+                            let lenN = arrayN.length;
+                            for(var j = 0; j < lenN; j++){
+                                context.strokeStyle = 'red';
+                                context.lineWidth   = 7;
+                                context.strokeRect(arrayN[j][0]*WRfactor, arrayN[j][1]*HRfactor, (arrayN[j][2]*WRfactor - arrayN[j][0]*WRfactor), (arrayN[j][3]*HRfactor-arrayN[j][1]*HRfactor));
+
+                                console.log("drawing boxesN");
+
+                            }
+                        }
+
+                    }
+
+                }
+
+            };
+
+      }
+     };
+
 
 
 
@@ -91,8 +145,10 @@ function Post(props) {
                 </a>
                 <Card.Body>
 
-                    <Button variant="primary" onClick={() => setModalShow(true)} /*setModalShow(true) onClick={showModal}*/>
-                        View </Button>
+                    <Button variant="primary" onClick={showModal}>
+                            View </Button>
+
+                    
 
                     <Modal
                         show={modalShow}
@@ -107,14 +163,10 @@ function Post(props) {
                         </Modal.Header>
                         <Modal.Body>
 
-                            <a href={post_url}>
-                                <canvas  id="canvas">
-                                    <Image src={image_url} fluid id="image"/>
-                                </canvas>
-
-                            </a>
-                            <canvas width="500" height="500" id="canvas"></canvas>
-                            <Button variant="primary" onClick={showBoxes} /*setModalShow(true) onClick={showModal}*/>
+                            <img  src={image_url} id="my_image" width="750" height="750"/>
+                            <canvas width="0" height="0" id="canvas" ></canvas>
+                            
+                            <Button variant="primary" onClick={showBoxes} id="showbutton"/*setModalShow(true) onClick={showModal}*/>
                                 ShowBoxes </Button>
                             <p>ID: {id}</p>
                             <p>Replies: {replies}</p>
@@ -140,6 +192,7 @@ function Post(props) {
                         <Modal.Footer>
                         </Modal.Footer>
                     </Modal>
+                
                 </Card.Body>
             </Card >
         </div >

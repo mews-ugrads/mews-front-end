@@ -83,8 +83,7 @@ function Home() {
     }
 
     const handleSubmitT = (event) => {
-        //location.reload()
-        //x event.preventDefault();
+        //event.preventDefault();
         console.log("in submitT")
       
         event.preventDefault();
@@ -140,8 +139,8 @@ function Home() {
             <br>
             </br>
             <h2 style={{
-                textAlign: "left"
-            }}> Central Posts</h2 >
+                textAlign: "center"
+            }}> Network Graph</h2 >
             
             <form onSubmit={handleSubmitClust}>
                 <label>
@@ -160,8 +159,9 @@ function Home() {
             <NetworkGraph data={ClustPostData} /> 
 
             <h2 style={{
-                textAlign: "left"
-            }}>Network Graph</h2> 
+                textAlign: "left",
+
+            }}></h2> 
 
 
 
