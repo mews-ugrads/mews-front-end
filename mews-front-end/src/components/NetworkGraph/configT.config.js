@@ -1,7 +1,7 @@
 module.exports =  {
     nodeHighlightBehavior: true,
-    height: 1000,
-    width:1000,
+    height: 700,
+    width:1200,
     focusAnimationDuration: 0.75,
     maxZoom: 8, 
     minZoom: .05, 
@@ -12,6 +12,7 @@ module.exports =  {
     highlightStrokeColor: "blue",
     labelProperty: "central",
     svg:"",
+    boxes:"",
     },
     link: {
     highlightColor: "lightblue",

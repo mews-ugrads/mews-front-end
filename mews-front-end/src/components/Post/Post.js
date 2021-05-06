@@ -3,37 +3,108 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 //import MyModal from "../MyModal/MyModal";
 import Modal from "react-bootstrap/Modal";
-import Image from "react-bootstrap/Image";
+import {Image as BImage} from "react-bootstrap/Image";
 import axios from "axios";
 //import Feed from "../Feed/Feed";
 
 function Post(props) {
-    const port = 5002
+    const port = 5000;
     const [modalShow, setModalShow] = useState(false);
     const [relPosts, setRelPosts] = useState([]);
 
-    let { image_url, post_url, when_posted, likes, reposts, replies, id, related_text, ocr_text, heatmap_url } = props.post;
-    //  const str1 = `http://dsg3.crc.nd.edu:${port}`
-    //image_url = str1.concat(image_url)
+    let { image_url, post_url, when_posted, likes, reposts, replies, id, related_text, ocr_text, boxes, heatmap_url } = props.post;
+
     useEffect(() => {
         getRelated();
     }, []);
-
+    
     const getRelated = () => {
         axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${id}/related`).then((response) => {
             const allRelPosts = response.data;
-            console.log("ALL", allRelPosts)
-            console.log(allRelPosts.length)
+           // console.log("ALL", allRelPosts)
+           // console.log(allRelPosts.length)
             for (let i = 0; i < allRelPosts.length; i++) {
                 console.log(id)
                 axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${allRelPosts[i].id}`).then((res) => {
                     relPosts.push(res.data)
-                    console.log("res", res.data)
-                    console.log("rel", relPosts)
+                   // console.log("res", res.data)
+                   // console.log("rel", relPosts)
                 }).catch(error => console.error("error"));
             }
         }).catch(error => console.error("error"));
     }
+
+    const showModal = function() {
+        setModalShow(true)
+       // if(boxes.length < 1){
+       //     document.getElementById('img').style.visibility = 'none';
+       // }
+       // let canvas = document.getElementById("canvas");
+       //let canvas = document.getElementById("canvas");
+
+      // if(canvas != null) {canvas.onload = drawCanv(canvas); } 
+
+    };
+
+    const showBoxes = function() {
+      if(boxes.length > 0 ){
+        document.getElementById('my_image').style.display = 'none';
+        console.log(boxes)
+        console.log("in showBoxes")
+        let canvas = document.getElementById("canvas");
+
+            let context = canvas.getContext("2d");
+
+            const img = new Image(60, 45); // Using optional size for image
+            img.onload = drawImageActualSize; // Draw when image has loaded
+            img.src = image_url;
+
+            function drawImageActualSize() {
+            // Use the intrinsic size of image in CSS pixels for the canvas element
+                let WRfactor = 750/this.naturalWidth;
+                let HRfactor = 750/this.naturalHeight;
+
+                canvas.width = this.naturalWidth * WRfactor;
+                canvas.height = this.naturalHeight * HRfactor;
+
+                console.log(boxes)
+
+                context.drawImage(this,0,0,this.naturalWidth * WRfactor, this.naturalHeight * HRfactor);//canvas.width, canvas.height);
+
+                if (boxes != null){
+                
+                    var len = (boxes).length;
+                    for(var i = 0; i < len; i++){
+                        console.log("drawing boxes");
+                        let array = boxes[i]
+                        console.log(array)
+                        if(array != null){
+                            let arrayN = JSON.parse("[" + array + "]");
+                            let lenN = arrayN.length;
+                            for(var j = 0; j < lenN; j++){
+                                context.strokeStyle = 'red';
+                                context.lineWidth   = 7;
+                                context.strokeRect(arrayN[j][0]*WRfactor, arrayN[j][1]*HRfactor, (arrayN[j][2]*WRfactor - arrayN[j][0]*WRfactor), (arrayN[j][3]*HRfactor-arrayN[j][1]*HRfactor));
+
+                                console.log("drawing boxesN");
+
+                            }
+                        }
+
+                    }
+
+                }
+
+            };
+
+      }
+     };
+
+
+
+
+  
+
     const displayHeatmap = () => {
         console.log("func")
         document.getElementById("heatmap").style.display = "block";
@@ -41,6 +112,7 @@ function Post(props) {
     /* const showModal = () => {
          
      }*/
+
     return (
 
 
@@ -56,8 +128,10 @@ function Post(props) {
                 </a>
                 <Card.Body>
 
-                    <Button variant="primary" onClick={() => setModalShow(true)} /*onClick={showModal}*/>
-                        View </Button>
+                    <Button variant="primary" onClick={showModal}>
+                            View </Button>
+
+                    
 
                     <Modal
                         show={modalShow}
@@ -68,19 +142,23 @@ function Post(props) {
                         aria-labelledby="contained-modal-title-vcenter"
                         centered
                     >
-                        <Modal.Header closeButton>
+                        <Modal.Header closeButton >
                         </Modal.Header>
                         <Modal.Body>
 
-                            <a href={post_url}>
-                                <Image src={image_url} fluid />
-
-                            </a>
+ <a href={post_url}>
+                            <img  src={image_url} id="my_image" width="750" height="750"/></a>
+                            <canvas width="0" height="0" id="canvas" ></canvas>
+                            
+                            <Button variant="primary" onClick={showBoxes} id="showbutton"/*setModalShow(true) onClick={showModal}*/>
+                                ShowBoxes </Button>
+                            
                             <Button variant="primary" onClick={displayHeatmap} >Display Heatmap</Button>
-                            <a href={post_url}>
-                                <Image id="heatmap" src={heatmap_url} style={{ display: "none" }} />
+                            
+                             <img  id="heatmap" src={heatmap_url} style={{ display: "none" }} width="750" height="750"/>
 
-                            </a>
+                        
+
                             <p>ID: {id}</p>
                             <p>Replies: {replies}</p>
                             <p>Reposts: {reposts}</p>
@@ -105,10 +183,10 @@ function Post(props) {
                         <Modal.Footer>
                         </Modal.Footer>
                     </Modal>
+                
                 </Card.Body>
             </Card >
         </div >
     )
 }
-
 export default Post;

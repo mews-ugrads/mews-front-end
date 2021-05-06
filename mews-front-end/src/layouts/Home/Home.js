@@ -17,6 +17,9 @@ function Home() {
 
     const [amountT, setAmountT] = useState(5);
     const [amountClust, setAmountClust] = useState(1);
+
+    const port = 5000;
+
     const [postData, setPostData] = useState([]);
     const [upperDate, setUpperDate] = useState()
     const [lowerDate, setLowerDate] = useState();
@@ -26,9 +29,9 @@ function Home() {
 
 
     useEffect(() => {
-        getCentralPosts();
+        //getCentralPosts();
         getClusteredPosts();
-        getPosts();
+        getPosts()
     }, []);
 
     const getPosts = () => {
@@ -37,6 +40,7 @@ function Home() {
                 amount: amountT,
                 upper: upperDate,
                 lower: lowerDate,
+                getBoxes: true,
                 search: newSearch
             }
         }).then((response) => {
@@ -54,11 +58,13 @@ function Home() {
     };
 
     const getClusteredPosts = () => {
-
-        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/recent`, {
-            params: {
+        console.log("in get clustered")
+        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/6`, { //recent
+            /* params: {
                 amount: amountClust,
-            }
+             }*/
+
+     //   axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/recent`, {
         }).then((response) => {
             const allClustPosts = response.data;
             setClustPostData(allClustPosts);
@@ -72,7 +78,7 @@ function Home() {
         console.log("in handle Clust")
         console.log(document.getElementById("amountClust").value)
         setAmountClust(document.getElementById("amountClust").value)
-        //getClusteredPosts();
+        getClusteredPosts();
     }
     const handleSubmitClust = (event) => {
         console.log("in submitClust")
@@ -86,12 +92,10 @@ function Home() {
     }
 
     const handleSubmitT = (event) => {
-        //location.reload()
-        //x event.preventDefault();
+        //event.preventDefault();
         console.log("in submitT")
 
         event.preventDefault();
-
         getPosts();
     }
     const handleLDChange = () => {
@@ -171,9 +175,9 @@ function Home() {
             <br>
             </br>
             <h2 style={{
-                textAlign: "left"
-            }}> Central Posts</h2 >
-
+                textAlign: "center"
+            }}> Network Graph</h2 >
+            
             <form onSubmit={handleSubmitClust}>
                 <label>
                     Amount
@@ -191,8 +195,9 @@ function Home() {
 
 
             <h2 style={{
-                textAlign: "left"
-            }}>Network Graph</h2>
+                textAlign: "left",
+
+            }}></h2> 
 
 
 
@@ -204,4 +209,25 @@ function Home() {
 
 export default Home;
 
-// <NetworkGraph data={ClustPostData} />
+/*
+<form onSubmit={handleSubmitClust}>
+                <label>
+                    Amount
+                    <select onChange={handleChangeClust} id="amountClust">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                        <option value="8">8</option>
+                        <option value="10">10</option>
+                    </select>
+                </label>
+                <Button type="submit" variant="secondary" size="sm">Submit</Button>
+            </form>
+            <NetworkGraph data={ClustPostData} /> 
+
+            <h2 style={{
+                textAlign: "left"
+            }}>Network Graph</h2> 
+*/
+
