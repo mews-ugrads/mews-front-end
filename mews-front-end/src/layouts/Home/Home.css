@@ -2,3 +2,6 @@ body {
     margin:100;
     padding:100
 }
+.containerGraph{
+    border: 5px double black;
+}

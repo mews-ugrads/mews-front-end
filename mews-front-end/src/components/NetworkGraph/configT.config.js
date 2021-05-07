@@ -6,6 +6,7 @@ module.exports =  {
     maxZoom: 8, 
     minZoom: .05, 
     focusZoom: 6,
+    initialZoom: .4,
     node: {
     color: "lightgreen",
     size: 600,

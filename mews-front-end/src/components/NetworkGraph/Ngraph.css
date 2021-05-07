@@ -1,3 +1,6 @@
 #canvas{
     display:block;
 }
+#graph-id{
+    border: 5px double black;
+}

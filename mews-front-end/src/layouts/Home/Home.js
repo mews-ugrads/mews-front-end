@@ -115,6 +115,10 @@ function Home() {
 
     }
 
+    const handleClustDChange = () => {
+        console.log("iin customee fate chagfe")
+    }
+
     const handleSearchSubmit = (event) => {
         console.log("in search submit")
 
@@ -129,7 +133,29 @@ function Home() {
         const newSearch = document.getElementById("searchValue").value
         setNewSearch(newSearch)
     }
-
+    /*
+    const ClustPostData = {
+        id: "graph",
+        data: ClustPostData,
+        config: this.state.config,
+        onClickNode: this.onClickNode,
+        onDoubleClickNode: this.onDoubleClickNode,
+        onRightClickNode: this.onRightClickNode,
+        onClickGraph: this.onClickGraph,
+        onClickLink: this.onClickLink,
+        onRightClickLink: this.onRightClickLink,
+        onMouseOverNode: this.onMouseOverNode,
+        onMouseOutNode: this.onMouseOutNode,
+        onMouseOverLink: this.onMouseOverLink,
+        onMouseOutLink: this.onMouseOutLink,
+        onNodePositionChange: this.onNodePositionChange,
+        onZoomChange: this.onZoomChange,
+      };
+      
+    const onZoomChange = (prevZoom, newZoom) => {
+        this.setState({ currentZoom: newZoom });
+      };
+    */
 
     return (
         <div className="Home">
@@ -189,21 +215,32 @@ function Home() {
                 textAlign: "center"
             }}> Network Graph</h2 >
 
-            <form onSubmit={handleSubmitClust}>
-                <label>
-                    Amount
-                    <select onChange={handleChangeClust} id="amountClust">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="4">4</option>
-                        <option value="6">6</option>
-                        <option value="8">8</option>
-                        <option value="10">10</option>
-                    </select>
-                </label>
-                <Button type="submit" variant="primary" size="sm">Search</Button>
-            </form>
-            <NetworkGraph data={ClustPostData} />
+            <Navbar style={{ backgroundColor: "white", textAlign:"center", position:"absolute", left: "33%"}} bg="light" variant="light" className="navbar2"> 
+                    <Navbar.Brand style={{ fontSize: "30px" ,textAlign:"center" }} href="/"></Navbar.Brand>
+                    
+                    <form onSubmit={handleSubmitClust} style={{display:"inline-block"}}>
+                        <label>
+                            Amount
+                            <select onChange={handleChangeClust} id="amountClust" style={{display:"inline-block"}}>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="6">6</option>
+                                <option value="8">8</option>
+                                <option value="10">10</option>
+                            </select>
+                        </label>
+                        <label> Date
+                            <input type="datetime-local" onChange={handleClustDChange} id="ClustDate" style={{display:"inline-block"}}></input>
+                        </label>
+                        <Button type="submit" variant="outline-success" size="sm" style={{display:"inline-block"}}>Submit</Button>
+                    
+                    </form>
+                </Navbar>
+
+            <div className = "containerGraph"  style={{border: '10px solid black'}}>
+                <NetworkGraph data={ClustPostData} id="graph"/>
+            </div>
 
 
 
@@ -214,26 +251,4 @@ function Home() {
 }
 
 export default Home;
-
-/*
-<form onSubmit={handleSubmitClust}>
-                <label>
-                    Amount
-                    <select onChange={handleChangeClust} id="amountClust">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="4">4</option>
-                        <option value="6">6</option>
-                        <option value="8">8</option>
-                        <option value="10">10</option>
-                    </select>
-                </label>
-                <Button type="submit" variant="secondary" size="sm">Submit</Button>
-            </form>
-            <NetworkGraph data={ClustPostData} />
-
-            <h2 style={{
-                textAlign: "left"
-            }}>Network Graph</h2>
-*/
 
