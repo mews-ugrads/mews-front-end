@@ -104,28 +104,30 @@ function NetworkGraph(props){
         };
 
         
-      
-    
+        const displayHeatmap = () => {
+            console.log("func")
+            document.getElementById("heatmap").style.display = "block";
+        }
 
-    
-        
-        const onClickLink = function(source, target) {
+       /* const onClickLink = function(source, target) {
             window.alert(`Clicked link between ${source} and ${target}`);
-        }; 
+        }; */
 
        
        return (
      <div>
-         
+            
             <Graph 
                 id="graph-id" // id is mandatory
                 data={data}
                 config={myConfig}
             //   onClickNode={() => setModalShow(true)}
                 onClickNode={onClickNode}
-                onClickLink={onClickLink}
+               // onClickLink={onClickLink}
+                
                // onMouseOverNode={onMouseOverNode}
             />
+            
             <Modal
                         show={modalShow}
                         onHide={() => setModalShow(false)}
@@ -142,6 +144,10 @@ function NetworkGraph(props){
                             <canvas width="0" height="0" id="canvas"></canvas>
                             <Button variant="primary" onClick={showBoxes} /*setModalShow(true) onClick={showModal}*/>
                                 ShowBoxes </Button>
+                            
+                            <Button variant="primary" onClick={displayHeatmap} >Display Heatmap</Button>
+                            <img id="heatmap" src={postData.heatmap_url} style={{ display: "none" }} width="750" height="750" />
+                            
                             <p>ID: {postData.id}</p>
                             <p>Replies: {postData.replies}</p>
                             <p>Reposts: {postData.reposts}</p>
