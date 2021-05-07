@@ -19,7 +19,7 @@ class Header extends React.Component {
             <Navbar bg="dark" variant="dark" className="navbar">
                 <Navbar.Brand href="/">MEWS</Navbar.Brand>
                 <Nav className="mr-auto">
-                    <Nav.Link href="/reverse">Network Graph</Nav.Link>
+                    <Nav.Link href="/graph">Network Graph</Nav.Link>
                 </Nav>
             </Navbar>
 
