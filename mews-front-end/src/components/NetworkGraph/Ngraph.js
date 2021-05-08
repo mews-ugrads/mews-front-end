@@ -1,15 +1,21 @@
 //import * as d3 from 'd3';
-import React, { useState } from "react";
+import React, { useEffect, useState, ReactDOM } from "react";
 import { Graph } from 'react-d3-graph';
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 //import Image from "react-bootstrap/Image";
+import Post from "../Post/Post"
 
 function NetworkGraph(props){
-
+        let port = 5001;
         const [modalShow, setModalShow] = useState(false);
         const [postData, setPostData] = useState(false);
+        let [relPosts, setRelPosts] = useState([]);
+
+      /*  useEffect(() => {
+            getRelatedG();
+        }, []); */
 
         var data = props.data;
 
@@ -18,13 +24,15 @@ function NetworkGraph(props){
     
         const onClickNode = function(nodeId, node) {             
        
-            axios.get(`http://dsg3.crc.nd.edu:5000/posts/${nodeId}`).then((response) => {
+            axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${nodeId}`).then((response) => {
                 const allPosts = response.data;
                 setPostData(allPosts);
                //console.log(allPosts.image_url)
             }).catch(error => console.error("error"));
             //window.alert(`Clicked node ${nodeId}`);
           //  window.alert(`${nodeId} is ${node.svg}`) 
+            //if(relPosts) {console.log(relPosts)}
+            getRelatedG(nodeId);
             console.log(node.svg)
             showModal(node.svg);
         };
@@ -105,13 +113,44 @@ function NetworkGraph(props){
 
         
         const displayHeatmap = () => {
-            console.log("func")
-            document.getElementById("heatmap").style.display = "block";
+            if(document.getElementById("heatmap").style.display == "none"){
+                document.getElementById("heatmap").style.display = "block";
+            }
+            else if(document.getElementById("heatmap").style.display = "block"){
+                document.getElementById("heatmap").style.display = "none";
+            }
         }
 
-       /* const onClickLink = function(source, target) {
-            window.alert(`Clicked link between ${source} and ${target}`);
-        }; */
+        const displayRelated = () => {
+            //console.log("func")
+            document.getElementById("relatedFrag").style.display = "block";
+        }
+
+
+        const getRelatedG = (nodeId) => {
+            console.log(postData.id)
+            console.log(nodeId)
+            console.log("//")
+            
+            axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${nodeId}/related`).then((response) => {
+                const  allRelPosts = response.data;
+                if(relPosts){
+                    for (var member in relPosts) delete relPosts[member];
+                }
+                // console.log("ALL", allRelPosts)
+                // console.log(allRelPosts.length)
+                for (let i = 0; i < allRelPosts.length; i++) {
+                    //console.log(postData.id)
+                    axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${allRelPosts[i].id}`).then((res) => {
+                        relPosts.push(res.data)
+                        //console.log(`http://dsg3.crc.nd.edu:${port}/posts/${allRelPosts[i].id}`)
+                        //console.log(relPosts)
+                        // console.log("res", res.data)
+                        // console.log("rel", relPosts)
+                    }).catch(error => console.error("error"));
+                }
+            }).catch(error => console.error("error"));
+        }
 
        
        return (
@@ -156,6 +195,20 @@ function NetworkGraph(props){
                             <p>Posted: {postData.when_posted}</p>
                             <p>Related Text: {postData.related_text}</p>
                             <p>OCR Text: {postData.ocr_text}</p>
+                            <h3>Related Posts</h3>
+                            <Button variant="primary" onClick={displayRelated} >Display Related Posts</Button>
+                            <div style={{ display: "none" }} id="relatedFrag">
+                                <React.Fragment>
+                                    {relPosts.map((post) => {
+                                        return (
+                                            <div>
+                                                <Post post={post} > </Post>
+                                            </div>
+                                        );
+                                    })
+                                    }
+                                </React.Fragment>
+                            </div>
                         </Modal.Body>
                         <Modal.Footer>
                         </Modal.Footer>
