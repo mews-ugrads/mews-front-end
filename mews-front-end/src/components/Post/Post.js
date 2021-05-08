@@ -5,12 +5,14 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Image as BImage } from "react-bootstrap/Image";
 import axios from "axios";
+import ToggleButton from 'react-bootstrap/ToggleButton'
 //import Feed from "../Feed/Feed";
 
 
 function Post(props) {
     const port = 5000;
     const [modalShow, setModalShow] = useState(false);
+    const [heatShow, setHeatShow] = useState(false);
     const [relPosts, setRelPosts] = useState([]);
 
     let { image_url, post_url, when_posted, likes, reposts, replies, id, related_text, ocr_text, boxes, heatmap_url } = props.post;
@@ -39,14 +41,6 @@ function Post(props) {
 
     const showModal = function () {
         setModalShow(true)
-        // if(boxes.length < 1){
-        //     document.getElementById('img').style.visibility = 'none';
-        // }
-        // let canvas = document.getElementById("canvas");
-        //let canvas = document.getElementById("canvas");
-
-        // if(canvas != null) {canvas.onload = drawCanv(canvas); } 
-
     };
 
     const showBoxes = function () {
@@ -109,8 +103,22 @@ function Post(props) {
 
 
     const displayHeatmap = () => {
-        console.log("func")
-        document.getElementById("heatmap").style.display = "block";
+       /* let disp  = true
+        if (disp == true){
+            document.getElementById("heatmap").style.display = "block";
+        }
+        else if (disp == false) {
+            document.getElementById("heatmap").style.display = "none";
+        } */
+
+        if(document.getElementById("heatmap").style.display == "none"){
+            document.getElementById("heatmap").style.display = "block";
+        }
+        else if(document.getElementById("heatmap").style.display = "block"){
+            document.getElementById("heatmap").style.display = "none";
+        }
+        //console.log("func")
+        //document.getElementById("heatmap").style.display = "block";
     }
     /* const showModal = () => {
          
@@ -153,6 +161,7 @@ function Post(props) {
                             <a href={post_url}>
                                 <img src={image_url} id="my_image" width="750" height="750" /></a>
                             <canvas width="0" height="0" id="canvas" ></canvas>
+
 
 
                             <Button variant="primary" onClick={displayHeatmap} style={{ marginTop: "20px", marginBottom: "20px" }} >Display Heatmap</Button>

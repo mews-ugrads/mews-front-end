@@ -14,10 +14,11 @@ import Button from "react-bootstrap/Button";
 
 const filesystem = require('fs');
 function Graph() {
-    const port = 5000;
+    const port = 5001;
 
     const [amountClust, setAmountClust] = useState(1);
     const [ClustPostData, setClustPostData] = useState([]);
+    const [graphDate, setGraphDate] = useState();
 
     useEffect(() => {
         getClusteredPosts();
@@ -34,10 +35,11 @@ function Graph() {
 
     const getClusteredPosts = () => {
         console.log("in get clustered")
-        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/6`, { //recent
-            /* params: {
+        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/daily`, { //recent
+             params: {
                 amount: amountClust,
-             }*/
+                date: graphDate,
+             }
 
             //   axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/recent`, {
         }).then((response) => {
@@ -61,8 +63,11 @@ function Graph() {
         getClusteredPosts();
     }
 
-    const handleClustDChange = () => {
+    const handleDateChange = () => {
         console.log("iin customee fate chagfe")
+        console.log(document.getElementById("graphDate").value)
+        const newDate = document.getElementById("graphDate").value
+        setGraphDate(newDate)
     }
 
     return (
@@ -87,8 +92,10 @@ function Graph() {
                                     <option value="10">10</option>
                                 </select>
                             </label>
+
                             <label style={{ color: "white" }}> Date
-                            <input type="datetime-local" onChange={handleClustDChange} id="ClustDate" style={{ display: "inline-block" }}></input>
+                            <input type="date" onChange={handleDateChange} id="graphDate" style={{ display: "inline-block" }}></input>
+
                             </label>
                             <Button type="submit" variant="success" size="sm" style={{ display: "inline-block", marginTop: "10px" }}>Submit</Button>
                         </Form>
