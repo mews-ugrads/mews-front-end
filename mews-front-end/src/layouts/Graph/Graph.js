@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import "../../../src/App.css";
 //import "../Graph/node_modules/bootstrap/dist/css/bootstrap.min.css";
@@ -12,6 +11,7 @@ import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container"
 
 import Button from "react-bootstrap/Button";
+
 const filesystem = require('fs');
 function Graph() {
     const port = 5001;
@@ -77,11 +77,11 @@ function Graph() {
 
             <div>
                 <Container>
-                    <Navbar style={{ backgroundColor: "white", textAlign: "center", position: "absolute", left: "11%", width: "78%" }} bg="light" variant="light" className="justify-content-between" expand="lg">
-                        <Navbar.Brand style={{ fontSize: "30px", textAlign: "center" }} href="/">Network Graph</Navbar.Brand>
+                    <Navbar style={{ marginBottom: "10px", textAlign: "center", left: "10%", width: "80%" }} bg="primary" variant="light" className="justify-content-between" expand="lg">
+                        <Navbar.Brand style={{ fontSize: "30px", color: "white" }} href="/">Network Graph</Navbar.Brand>
 
                         <Form inline onSubmit={handleSubmitClust} style={{ display: "inline-block" }} className=" mr-sm-2">
-                            <label>
+                            <label style={{ color: "white" }} >
                                 Amount
                             <select onChange={handleChangeClust} id="amountClust" style={{ display: "inline-block" }}>
                                     <option value="1">1</option>
@@ -92,17 +92,20 @@ function Graph() {
                                     <option value="10">10</option>
                                 </select>
                             </label>
-                            <label> Date
+
+                            <label style={{ color: "white" }}> Date
                             <input type="date" onChange={handleDateChange} id="graphDate" style={{ display: "inline-block" }}></input>
+
                             </label>
-                            <Button type="submit" variant="outline-success" size="sm" style={{ display: "inline-block" }}>Submit</Button>
+                            <Button type="submit" variant="success" size="sm" style={{ display: "inline-block", marginTop: "10px" }}>Submit</Button>
                         </Form>
                     </Navbar>
                 </Container>
             </div>
-
-            <div className="containerGraph" style={{ padding: "120px" }} >
-                <NetworkGraph data={ClustPostData} id="graph" />
+            <div>
+                <div className="containerGraph" style={{ backgroundColor: "white", border: "3px solid #363431" }} >
+                    <NetworkGraph data={ClustPostData} id="graph" />
+                </div>
             </div>
         </div >
     );

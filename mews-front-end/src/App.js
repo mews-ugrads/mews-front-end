@@ -22,13 +22,13 @@ function App() {
   return (
     <Router>
 
-      <div className="App">
+      <div className="App" style={{ backgroundColor: " #dedfe0" }}>
         <Switch>
           <Route path="/" exact component={Home}></Route>
           <Route path="/graph" exact component={Graph}></Route>
         </Switch>
       </div >
-    </Router>
+    </Router >
 
 
   );
