@@ -7,6 +7,7 @@ import { Image as BImage } from "react-bootstrap/Image";
 import axios from "axios";
 //import Feed from "../Feed/Feed";
 
+
 function Post(props) {
     const port = 5000;
     const [modalShow, setModalShow] = useState(false);
@@ -21,7 +22,9 @@ function Post(props) {
     const getRelated = () => {
         axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${id}/related`).then((response) => {
             const allRelPosts = response.data;
-            // console.log("ALL", allRelPosts)
+            console.log("relposts")
+
+            console.log("ALL", allRelPosts)
             // console.log(allRelPosts.length)
             for (let i = 0; i < allRelPosts.length; i++) {
                 console.log(id)
@@ -131,8 +134,6 @@ function Post(props) {
                     <Button variant="primary" onClick={showModal}>
                         View </Button>
 
-
-
                     <Modal
                         show={modalShow}
                         onHide={() => setModalShow(false)}
@@ -145,28 +146,27 @@ function Post(props) {
                         <Modal.Header closeButton >
                         </Modal.Header>
                         <Modal.Body>
-
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <p>Click on image to be taken to post. {id}</p>
+                                <p><b>{when_posted}</b></p>
+                            </div>
                             <a href={post_url}>
                                 <img src={image_url} id="my_image" width="750" height="750" /></a>
                             <canvas width="0" height="0" id="canvas" ></canvas>
 
-                            <Button variant="primary" onClick={showBoxes} id="showbutton"/*setModalShow(true) onClick={showModal}*/>
-                                ShowBoxes </Button>
 
-                            <Button variant="primary" onClick={displayHeatmap} >Display Heatmap</Button>
+                            <Button variant="primary" onClick={displayHeatmap} style={{ marginTop: "20px", marginBottom: "20px" }} >Display Heatmap</Button>
 
                             <img id="heatmap" src={heatmap_url} style={{ display: "none" }} width="750" height="750" />
 
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <p><b style={{ fontSize: "40px" }}>{replies}</b> Replies</p>
+                                <p><b style={{ fontSize: "40px" }}>{reposts}</b> Reposts</p>
+                                <p><b style={{ fontSize: "40px" }}>{likes}</b> Likes</p>
+                            </div>
 
+                            <p><b>Caption:</b> {related_text}</p>
 
-                            <p>ID: {id}</p>
-                            <p>Replies: {replies}</p>
-                            <p>Reposts: {reposts}</p>
-                            <p>Likes: {likes}</p>
-
-                            <p>Posted: {when_posted}</p>
-                            <p>Related Text: {related_text}</p>
-                            <p>OCR Text: {ocr_text}</p>
                             <h3>Related Posts</h3>
                             <React.Fragment>
                                 {relPosts.map((post) => {
@@ -178,7 +178,6 @@ function Post(props) {
                                 })
                                 }
                             </React.Fragment>
-
                         </Modal.Body>
                         <Modal.Footer>
                         </Modal.Footer>
@@ -190,3 +189,6 @@ function Post(props) {
     )
 }
 export default Post;
+
+/*<Button style={{ display: "inline-block", marginRight: "10px", marginTop: "20px", marginBottom: "20px" }} variant="primary" onClick={showBoxes} id="showbutton">
+Display Subimages </Button> */

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import "../../../src/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -12,8 +11,12 @@ import Form from "react-bootstrap/Form";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container"
-
 import Button from "react-bootstrap/Button";
+//import DatetimeRangePicker from 'react-bootstrap-datetimerangepicker';
+import 'bootstrap/dist/css/bootstrap.css';
+import Card from "react-bootstrap/Card";
+
+
 const filesystem = require('fs');
 function Home() {
     const port = 5000;
@@ -87,24 +90,23 @@ function Home() {
             <Header />
             <br></br>
             <Container>
-                <Navbar style={{ position: "absolute", left: "11%", width: "78%" }} bg="light" variant="light" className="justify-content-between">
-                    <Navbar.Brand style={{ fontSize: "30px" }} href="/">Trending Posts</Navbar.Brand>
+                <Navbar style={{ left: "10%", width: "80%" }} bg="primary" variant="light" className="justify-content-between">
+                    <Navbar.Brand style={{ color: "white", fontSize: "30px", marginRight: "40px" }} href="/">Trending Posts</Navbar.Brand>
                     <Form inline onSubmit={handleSearchSubmit}>
-                        <Form.Group controlId="search">
+                        <Form.Group style={{ marginRight: "20px" }} controlId="search">
                             <Form.Control style={{
 
                             }} type="text" placeholder="Search" id="searchValue" onChange={handleSearch} className="mr-sm-2" />
                         </Form.Group>
-
-                        <Button variant="outline-success" type="submit" size="sm">
+                        <Button style={{ marginTop: "8px" }} variant="success" type="submit" size="sm">
                             Search
                         </Button>
                     </Form >
                     <Form onSubmit={handleSubmitT}>
-                        <label>
+                        <label style={{ color: "white" }}>
                             Amount
                     <select onChange={handleChangeT} id="amountT">
-                                <option value="5">5</option>
+                                <option value="5">8</option>
                                 <option value="10">10</option>
                                 <option value="15">15</option>
                                 <option value="20">20</option>
@@ -114,23 +116,23 @@ function Home() {
                                 <option value="40">40</option>
                                 <option value="45">45</option>
                                 <option value="50">50</option>
+                                <option value="50">500</option>
                             </select>
                         </label>
-                        <label> Date Range
+                        <label style={{ color: "white" }}> Lower Date Range
                 <input type="datetime-local" onChange={handleLDChange} id="Ldate"></input>
-                            <input type="datetime-local" onChange={handleUDChange} id="Udate"></input>
-
                         </label>
-                        <Button type="submit" variant="outline-success" size="sm">Submit</Button>
+                        <label style={{ color: "white" }}> Upper Date Range
+                            <input type="datetime-local" onChange={handleUDChange} id="Udate"></input>
+                        </label>
+                        <Button type="submit" variant="success" size="sm">Submit</Button>
                     </Form>
 
                 </Navbar>
+
                 <Feed postData={postData}
                 />
             </Container>
-
-
-
 
 
 
