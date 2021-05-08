@@ -14,7 +14,7 @@ import Button from "react-bootstrap/Button";
 
 const filesystem = require('fs');
 function Graph() {
-    const port = 5001;
+    const port = 5000;
 
     const [amountClust, setAmountClust] = useState(1);
     const [ClustPostData, setClustPostData] = useState([]);
@@ -35,13 +35,13 @@ function Graph() {
 
     const getClusteredPosts = () => {
         console.log("in get clustered")
-        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/daily`, { //recent
+        /* axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/daily`, { //recent
              params: {
-                amount: amountClust,
-                date: graphDate,
-             }
+                 amount: amountClust,
+                 date: graphDate,
+             }*/
 
-            //   axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/recent`, {
+        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/recent`, {
         }).then((response) => {
             const allClustPosts = response.data;
             setClustPostData(allClustPosts);
