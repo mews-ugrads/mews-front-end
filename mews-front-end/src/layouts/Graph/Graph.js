@@ -35,13 +35,11 @@ function Graph() {
 
     const getClusteredPosts = () => {
         console.log("in get clustered")
-        /* axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/daily`, { //recent
-             params: {
-                 amount: amountClust,
-                 date: graphDate,
-             }*/
-
-        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/recent`, {
+        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/daily`, { //recent
+            params: {
+            amount: amountClust,
+            day: graphDate,
+            }
         }).then((response) => {
             const allClustPosts = response.data;
             setClustPostData(allClustPosts);
