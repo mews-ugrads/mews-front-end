@@ -11,9 +11,8 @@ function NetworkGraph(props) {
     let port = 5000;
     const [modalShow, setModalShow] = useState(false);
     const [postData, setPostData] = useState(false);
-    let [relPosts, setRelPosts] = useState([]);
-
-    /*  useEffect(() => {
+    const [relPosts, setRelPosts] = useState([]);
+   /*   useEffect(() => {
           getRelatedG();
       }, []); */
 
@@ -23,21 +22,20 @@ function NetworkGraph(props) {
     const myConfig = require("./configT.config.js")
 
     const onClickNode = function (nodeId, node) {
-
+        getRelatedG(nodeId);
         axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${nodeId}`).then((response) => {
+            //`http://dsg3.crc.nd.edu:${port}/clusters/6 for bounding boxes
             const allPosts = response.data;
             setPostData(allPosts);
             //console.log(allPosts.image_url)
         }).catch(error => console.error("error"));
-        //window.alert(`Clicked node ${nodeId}`);
-        //  window.alert(`${nodeId} is ${node.svg}`) 
-        //if(relPosts) {console.log(relPosts)}
-        getRelatedG(nodeId);
+
         console.log(node.svg)
         showModal(node.svg);
     };
 
     const showModal = function (pic_url) {
+        //getRelatedG(nodeId);
         console.log(pic_url)
         setModalShow(true)
 
@@ -123,23 +121,25 @@ function NetworkGraph(props) {
 
     const displayRelated = () => {
         //console.log("func")
+        console.log(relPosts)
         document.getElementById("relatedFrag").style.display = "block";
     }
 
 
     const getRelatedG = (nodeId) => {
-        console.log(postData.id)
-        console.log(nodeId)
-        console.log("//")
+        //console.log(postData.id)
+        //console.log(nodeId)
+        //console.log("//")
 
         axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${nodeId}/related`).then((response) => {
             const allRelPosts = response.data;
+            setRelPosts(allRelPosts)
             if (relPosts) {
                 for (var member in relPosts) delete relPosts[member];
             }
             // console.log("ALL", allRelPosts)
             // console.log(allRelPosts.length)
-            for (let i = 0; i < allRelPosts.length; i++) {
+          /*  for (let i = 0; i < allRelPosts.length; i++) {
                 //console.log(postData.id)
                 axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${allRelPosts[i].id}`).then((res) => {
                     relPosts.push(res.data)
@@ -149,7 +149,11 @@ function NetworkGraph(props) {
                     // console.log("rel", relPosts)
                 }).catch(error => console.error("error"));
             }
+            console.log(relPosts)
+            //setRelPosts(relPosts)
+            console.log(relPosts) */
         }).catch(error => console.error("error"));
+        
     }
 
 
