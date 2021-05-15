@@ -1,16 +1,11 @@
-import React, { useEffect, useState, ReactDOM } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-//import MyModal from "../MyModal/MyModal";
 import Modal from "react-bootstrap/Modal";
-import { Image as BImage } from "react-bootstrap/Image";
 import axios from "axios";
-import ToggleButton from 'react-bootstrap/ToggleButton'
-//import Feed from "../Feed/Feed";
-
 
 function Post(props) {
-    const port = 5000;
+    const port = 5001;
     const [modalShow, setModalShow] = useState(false);
     const [heatShow, setHeatShow] = useState(false);
     const [relPosts, setRelPosts] = useState([]);
@@ -24,16 +19,11 @@ function Post(props) {
     const getRelated = () => {
         axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${id}/related`).then((response) => {
             const allRelPosts = response.data;
-            console.log("relposts")
-
-            console.log("ALL", allRelPosts)
-            // console.log(allRelPosts.length)
             for (let i = 0; i < allRelPosts.length; i++) {
                 console.log(id)
                 axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${allRelPosts[i].id}`).then((res) => {
+                    console.log("related")
                     relPosts.push(res.data)
-                    // console.log("res", res.data)
-                    // console.log("rel", relPosts)
                 }).catch(error => console.error("error"));
             }
         }).catch(error => console.error("error"));
@@ -69,10 +59,8 @@ function Post(props) {
                 context.drawImage(this, 0, 0, this.naturalWidth * WRfactor, this.naturalHeight * HRfactor);//canvas.width, canvas.height);
 
                 if (boxes != null) {
-
                     var len = (boxes).length;
                     for (var i = 0; i < len; i++) {
-                        console.log("drawing boxes");
                         let array = boxes[i]
                         console.log(array)
                         if (array != null) {
@@ -82,51 +70,34 @@ function Post(props) {
                                 context.strokeStyle = 'red';
                                 context.lineWidth = 7;
                                 context.strokeRect(arrayN[j][0] * WRfactor, arrayN[j][1] * HRfactor, (arrayN[j][2] * WRfactor - arrayN[j][0] * WRfactor), (arrayN[j][3] * HRfactor - arrayN[j][1] * HRfactor));
-
-                                console.log("drawing boxesN");
-
                             }
                         }
-
                     }
-
                 }
-
             };
-
         }
     };
 
-
-
-
-
-
     const displayHeatmap = () => {
-       /* let disp  = true
-        if (disp == true){
+        console.log(heatmap_url)
+        if (document.getElementById("heatmap").style.display == "none") {
             document.getElementById("heatmap").style.display = "block";
         }
-        else if (disp == false) {
-            document.getElementById("heatmap").style.display = "none";
-        } */
-
-        if(document.getElementById("heatmap").style.display == "none"){
-            document.getElementById("heatmap").style.display = "block";
-        }
-        else if(document.getElementById("heatmap").style.display = "block"){
+        else if (document.getElementById("heatmap").style.display == "block") {
             document.getElementById("heatmap").style.display = "none";
         }
-        //console.log("func")
-        //document.getElementById("heatmap").style.display = "block";
     }
-    /* const showModal = () => {
-         
-     }*/
+
+    const displayRelated = () => {
+        if (document.getElementById("relatedFrag").style.display == "none") {
+            document.getElementById("relatedFrag").style.display = "block";
+        }
+        else if (document.getElementById("relatedFrag").style.display == "block") {
+            document.getElementById("relatedFrag").style.display = "none";
+        }
+    }
 
     return (
-
-
         <div>
             <Card style={{
                 width: '16rem', margin: "10px"
@@ -138,10 +109,8 @@ function Post(props) {
                     }} />
                 </a>
                 <Card.Body>
-
                     <Button variant="primary" onClick={showModal}>
                         View </Button>
-
                     <Modal
                         show={modalShow}
                         onHide={() => setModalShow(false)}
@@ -155,14 +124,15 @@ function Post(props) {
                         </Modal.Header>
                         <Modal.Body>
                             <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <p>Click on image to be taken to post. {id}</p>
+                                <p>Click on image to be taken to post. </p>
                                 <p><b>{when_posted}</b></p>
                             </div>
-                            <a href={post_url}>
+                            <a href={post_url} target="_blank">
                                 <img src={image_url} id="my_image" width="750" height="750" /></a>
                             <canvas width="0" height="0" id="canvas" ></canvas>
 
-
+                            <Button style={{ display: "inline-block", marginRight: "10px", marginTop: "20px", marginBottom: "20px" }} variant="primary" onClick={showBoxes} id="showbutton">
+                                Display Subimages </Button>
 
                             <Button variant="primary" onClick={displayHeatmap} style={{ marginTop: "20px", marginBottom: "20px" }} >Display Heatmap</Button>
 
@@ -177,16 +147,21 @@ function Post(props) {
                             <p><b>Caption:</b> {related_text}</p>
 
                             <h3>Related Posts</h3>
-                            <React.Fragment>
-                                {relPosts.map((post) => {
-                                    return (
-                                        <div>
-                                            <Post post={post}> </Post>
-                                        </div>
-                                    );
-                                })
-                                }
-                            </React.Fragment>
+
+
+                            <Button variant="primary" onClick={displayRelated} >Display Related Posts</Button>
+                            <div style={{ display: "none" }} id="relatedFrag">
+                                <React.Fragment>
+                                    {relPosts.map((post) => {
+                                        return (
+                                            <div>
+                                                <Post post={post} > </Post>
+                                            </div>
+                                        );
+                                    })
+                                    }
+                                </React.Fragment>
+                            </div>
                         </Modal.Body>
                         <Modal.Footer>
                         </Modal.Footer>
@@ -198,6 +173,3 @@ function Post(props) {
     )
 }
 export default Post;
-
-/*<Button style={{ display: "inline-block", marginRight: "10px", marginTop: "20px", marginBottom: "20px" }} variant="primary" onClick={showBoxes} id="showbutton">
-Display Subimages </Button> */

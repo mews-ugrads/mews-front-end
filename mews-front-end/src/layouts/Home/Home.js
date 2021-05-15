@@ -1,25 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "../../../src/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-//import "../Graph/node_modules/bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../components/Header/Header";
 import Feed from "../../components/Feed/Feed";
-import NetworkGraph from "../../components/NetworkGraph/Ngraph";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button";
-//import DatetimeRangePicker from 'react-bootstrap-datetimerangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
-import Card from "react-bootstrap/Card";
 
-
-const filesystem = require('fs');
 function Home() {
-    const port = 5000;
+    const port = 5001;
     const [newSearch, setNewSearch] = useState();
     const [amountT, setAmountT] = useState(8);
     const [postData, setPostData] = useState([]);
@@ -66,10 +58,6 @@ function Home() {
         setUpperDate(newUDate)
     }
 
-    const handleClustDChange = () => {
-        console.log("iin customee fate chagfe")
-    }
-
     const handleSearchSubmit = (event) => {
         console.log("in search submit")
 
@@ -110,13 +98,9 @@ function Home() {
                                 <option value="10">10</option>
                                 <option value="15">15</option>
                                 <option value="20">20</option>
-                                <option value="25">25</option>
                                 <option value="30">30</option>
-                                <option value="30">35</option>
                                 <option value="40">40</option>
-                                <option value="45">45</option>
                                 <option value="50">50</option>
-                                <option value="50">500</option>
                             </select>
                         </label>
                         <label style={{ color: "white" }}> Lower Date Range
@@ -127,19 +111,12 @@ function Home() {
                         </label>
                         <Button type="submit" variant="success" size="sm">Submit</Button>
                     </Form>
-
                 </Navbar>
-
                 <Feed postData={postData}
                 />
             </Container>
-
-
-
-
         </div >
     );
-
 }
 
 export default Home;
