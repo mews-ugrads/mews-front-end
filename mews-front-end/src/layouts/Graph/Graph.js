@@ -20,18 +20,10 @@ function Graph() {
         getClusteredPosts();
     }, []);
 
-    /*
-       const getCentralPosts = () => {
-           axios.get(`http://dsg3.crc.nd.edu:${port}/graph/central`).then((response) => {
-               const allCentPosts = response.data;
-               setCentPostData(allCentPosts);
-   
-           }).catch(error => console.error("error"));
-       };*/
 
     const getClusteredPosts = () => {
-        console.log("in get clustered")
-        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/6`, { //recent
+        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/daily`, {
+
             params: {
                 amount: amountClust,
                 day: graphDate,
@@ -42,10 +34,8 @@ function Graph() {
         }).catch(error => console.error("error"));
 
     };
-    console.log(amountClust)
 
     const handleChangeClust = () => {
-        console.log(document.getElementById("amountClust").value)
         setAmountClust(document.getElementById("amountClust").value)
         getClusteredPosts();
     }
@@ -55,7 +45,7 @@ function Graph() {
     }
 
     const handleDateChange = () => {
-        console.log(document.getElementById("graphDate").value)
+
         const newDate = document.getElementById("graphDate").value
         setGraphDate(newDate)
     }

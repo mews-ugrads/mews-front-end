@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Graph } from 'react-d3-graph';
 import Modal from "react-bootstrap/Modal";
@@ -10,9 +11,6 @@ function NetworkGraph(props) {
     const [modalShow, setModalShow] = useState(false);
     const [postData, setPostData] = useState(false);
     const [relPosts, setRelPosts] = useState([]);
-    /*   useEffect(() => {
-           getRelatedG();
-       }, []); */
 
     var data = props.data;
 
@@ -21,22 +19,16 @@ function NetworkGraph(props) {
     const onClickNode = function (nodeId, node) {
         getRelatedG(nodeId);
         axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${nodeId}`).then((response) => {
-            //`http://dsg3.crc.nd.edu:${port}/clusters/6 for bounding boxes
-            //`http://dsg3.crc.nd.edu:${port}/posts/${nodeId}`
+
             const allPosts = response.data;
             setPostData(allPosts);
         }).catch(error => console.error("error"));
 
-        console.log(node.svg)
         showModal(node.svg);
     };
 
     const showModal = function (pic_url) {
-        //getRelatedG(nodeId);
-        console.log(pic_url)
         setModalShow(true)
-
-        console.log("in modal")
 
         let canvas = document.getElementById("canvas");
         let context = canvas.getContext("2d");
@@ -63,23 +55,19 @@ function NetworkGraph(props) {
         img.src = postData.image_url;
 
         function drawImageActualSize() {
-            // Use the intrinsic size of image in CSS pixels for the canvas element
             let WRfactor = 750 / this.naturalWidth;
             let HRfactor = 750 / this.naturalHeight;
 
             canvas.width = this.naturalWidth * WRfactor;
             canvas.height = this.naturalHeight * HRfactor;
 
-            console.log(postData.boxes)
-
-            context.drawImage(this, 0, 0, this.naturalWidth * WRfactor, this.naturalHeight * HRfactor);//canvas.width, canvas.height);
+            context.drawImage(this, 0, 0, this.naturalWidth * WRfactor, this.naturalHeight * HRfactor);
 
             if (postData.boxes != null) {
 
                 var len = (postData.boxes).length;
                 for (var i = 0; i < len; i++) {
                     let array = postData.boxes[i]
-                    console.log(array)
                     if (array != null) {
                         console.log("Array: " + array);
                         let arrayN = JSON.parse("[" + array + "]");
@@ -88,6 +76,7 @@ function NetworkGraph(props) {
                             context.strokeStyle = 'red';
                             context.lineWidth = 7;
                             context.strokeRect(arrayN[j][0] * WRfactor, arrayN[j][1] * HRfactor, (arrayN[j][2] - arrayN[j][0]) * WRfactor, (arrayN[j][3] - arrayN[j][1]) * HRfactor);
+
                         }
                     }
                 }
@@ -106,6 +95,7 @@ function NetworkGraph(props) {
     }
 
     const displayRelated = () => {
+
         if (document.getElementById("relatedFrag").style.display == "none") {
             document.getElementById("relatedFrag").style.display = "block";
         }
@@ -115,27 +105,14 @@ function NetworkGraph(props) {
     }
 
     const getRelatedG = (nodeId) => {
+
         axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${nodeId}/related`).then((response) => {
             const allRelPosts = response.data;
             setRelPosts(allRelPosts)
             if (relPosts) {
                 for (var member in relPosts) delete relPosts[member];
             }
-            // console.log("ALL", allRelPosts)
-            // console.log(allRelPosts.length)
-            /*  for (let i = 0; i < allRelPosts.length; i++) {
-                  //console.log(postData.id)
-                  axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${allRelPosts[i].id}`).then((res) => {
-                      relPosts.push(res.data)
-                      //console.log(`http://dsg3.crc.nd.edu:${port}/posts/${allRelPosts[i].id}`)
-                      //console.log(relPosts)
-                      // console.log("res", res.data)
-                      // console.log("rel", relPosts)
-                  }).catch(error => console.error("error"));
-              }
-              console.log(relPosts)
-              //setRelPosts(relPosts)
-              console.log(relPosts) */
+
         }).catch(error => console.error("error"));
 
     }
@@ -143,13 +120,11 @@ function NetworkGraph(props) {
     return (
         <div>
             <Graph
-                id="graph-id" // id is mandatory
+                id="graph-id" 
                 data={data}
                 config={myConfig}
-                //   onClickNode={() => setModalShow(true)}
                 onClickNode={onClickNode}
-            // onClickLink={onClickLink}
-            // onMouseOverNode={onMouseOverNode}
+
             />
             <Modal
                 show={modalShow}
@@ -207,6 +182,7 @@ function NetworkGraph(props) {
             </Modal>
         </div>
     );
+
 }
 
 export default NetworkGraph;
