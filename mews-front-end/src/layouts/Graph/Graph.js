@@ -12,7 +12,7 @@ import Button from "react-bootstrap/Button";
 function Graph() {
     const port = 5001;
 
-    const [amountClust, setAmountClust] = useState(4);
+    const [amountClust, setAmountClust] = useState(1);
     const [ClustPostData, setClustPostData] = useState([]);
     const [graphDate, setGraphDate] = useState();
 
