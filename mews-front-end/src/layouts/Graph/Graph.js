@@ -23,6 +23,7 @@ function Graph() {
 
     const getClusteredPosts = () => {
         axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/daily`, {
+
             params: {
                 amount: amountClust,
                 day: graphDate,
@@ -44,6 +45,7 @@ function Graph() {
     }
 
     const handleDateChange = () => {
+
         const newDate = document.getElementById("graphDate").value
         setGraphDate(newDate)
     }

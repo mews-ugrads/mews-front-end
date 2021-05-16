@@ -1,4 +1,5 @@
-import React, { useEffect, useState, ReactDOM } from "react";
+
+import React, { useState } from "react";
 import { Graph } from 'react-d3-graph';
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
@@ -6,20 +7,19 @@ import Button from "react-bootstrap/Button";
 import Post from "../Post/Post"
 
 function NetworkGraph(props) {
-    let port = 5000;
+    let port = 5001;
     const [modalShow, setModalShow] = useState(false);
     const [postData, setPostData] = useState(false);
     const [relPosts, setRelPosts] = useState([]);
 
-
     var data = props.data;
-
 
     const myConfig = require("./configT.config.js")
 
     const onClickNode = function (nodeId, node) {
         getRelatedG(nodeId);
         axios.get(`http://dsg3.crc.nd.edu:${port}/posts/${nodeId}`).then((response) => {
+
             const allPosts = response.data;
             setPostData(allPosts);
         }).catch(error => console.error("error"));
@@ -40,14 +40,10 @@ function NetworkGraph(props) {
             // Use the intrinsic size of image in CSS pixels for the canvas element
             let WRfactor = 750 / this.naturalWidth;
             let HRfactor = 750 / this.naturalHeight;
-
             canvas.width = this.naturalWidth * WRfactor;
             canvas.height = this.naturalHeight * HRfactor;
-
             context.drawImage(this, 0, 0, this.naturalWidth * WRfactor, this.naturalHeight * HRfactor);
         };
-
-
     };
 
     const showBoxes = function () {
@@ -73,6 +69,7 @@ function NetworkGraph(props) {
                 for (var i = 0; i < len; i++) {
                     let array = postData.boxes[i]
                     if (array != null) {
+                        console.log("Array: " + array);
                         let arrayN = JSON.parse("[" + array + "]");
                         let lenN = arrayN.length;
                         for (var j = 0; j < lenN; j++) {
@@ -80,19 +77,15 @@ function NetworkGraph(props) {
                             context.lineWidth = 7;
                             context.strokeRect(arrayN[j][0] * WRfactor, arrayN[j][1] * HRfactor, (arrayN[j][2] - arrayN[j][0]) * WRfactor, (arrayN[j][3] - arrayN[j][1]) * HRfactor);
 
-
                         }
                     }
-
                 }
-
             }
-
         }
     };
 
-
     const displayHeatmap = () => {
+        console.log(postData.heatmap_url)
         if (document.getElementById("heatmap").style.display == "none") {
             document.getElementById("heatmap").style.display = "block";
         }
@@ -102,9 +95,14 @@ function NetworkGraph(props) {
     }
 
     const displayRelated = () => {
-        document.getElementById("relatedFrag").style.display = "block";
-    }
 
+        if (document.getElementById("relatedFrag").style.display == "none") {
+            document.getElementById("relatedFrag").style.display = "block";
+        }
+        else if (document.getElementById("relatedFrag").style.display == "block") {
+            document.getElementById("relatedFrag").style.display = "none";
+        }
+    }
 
     const getRelatedG = (nodeId) => {
 
@@ -116,20 +114,18 @@ function NetworkGraph(props) {
             }
 
         }).catch(error => console.error("error"));
-        
-    }
 
+    }
 
     return (
         <div>
-
             <Graph
                 id="graph-id" 
                 data={data}
                 config={myConfig}
                 onClickNode={onClickNode}
-            />
 
+            />
             <Modal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
@@ -148,7 +144,7 @@ function NetworkGraph(props) {
                         <p><b>{postData.when_posted}</b></p>
                     </div>
 
-                    <a href={postData.post_url}>
+                    <a href={postData.post_url} target="_blank">
                         <canvas width="0" height="0" id="canvas"></canvas>
                     </a>
                     <div style={{ display: "inline-block" }}>
@@ -184,9 +180,6 @@ function NetworkGraph(props) {
                 <Modal.Footer>
                 </Modal.Footer>
             </Modal>
-
-
-
         </div>
     );
 
