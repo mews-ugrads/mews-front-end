@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "../../../src/App.css";
-//import "../Graph/node_modules/bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../components/Header/Header";
-import Feed from "../../components/Feed/Feed";
 import NetworkGraph from "../../components/NetworkGraph/Ngraph";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container"
 
 import Button from "react-bootstrap/Button";
 
-const filesystem = require('fs');
 function Graph() {
-    const port = 5000;
+    const port = 5001;
 
-    const [amountClust, setAmountClust] = useState(1);
+    const [amountClust, setAmountClust] = useState(4);
     const [ClustPostData, setClustPostData] = useState([]);
     const [graphDate, setGraphDate] = useState();
 
@@ -24,46 +20,30 @@ function Graph() {
         getClusteredPosts();
     }, []);
 
-    /*
-       const getCentralPosts = () => {
-           axios.get(`http://dsg3.crc.nd.edu:${port}/graph/central`).then((response) => {
-               const allCentPosts = response.data;
-               setCentPostData(allCentPosts);
-   
-           }).catch(error => console.error("error"));
-       };*/
 
     const getClusteredPosts = () => {
-        console.log("in get clustered")
-        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/daily`, { //recent
+        axios.get(`http://dsg3.crc.nd.edu:${port}/clusters/daily`, {
             params: {
-            amount: amountClust,
-            day: graphDate,
+                amount: amountClust,
+                day: graphDate,
             }
         }).then((response) => {
             const allClustPosts = response.data;
             setClustPostData(allClustPosts);
-
         }).catch(error => console.error("error"));
 
     };
-    console.log(amountClust)
 
     const handleChangeClust = () => {
-        console.log("in handle Clust")
-        console.log(document.getElementById("amountClust").value)
         setAmountClust(document.getElementById("amountClust").value)
         getClusteredPosts();
     }
     const handleSubmitClust = (event) => {
-        console.log("in submitClust")
         event.preventDefault();
         getClusteredPosts();
     }
 
     const handleDateChange = () => {
-        console.log("iin customee fate chagfe")
-        console.log(document.getElementById("graphDate").value)
         const newDate = document.getElementById("graphDate").value
         setGraphDate(newDate)
     }
@@ -103,6 +83,7 @@ function Graph() {
             <div>
                 <div className="containerGraph" style={{ backgroundColor: "white", border: "3px solid #363431" }} >
                     <NetworkGraph data={ClustPostData} id="graph" />
+
                 </div>
             </div>
         </div >
